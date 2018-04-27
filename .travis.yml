@@ -1,37 +1,36 @@
+# 使用语言
 language: node_js
-sudo: required
-node_js: 
-  - 7.9.0
-
-cache:
-  directories:
-    - node_modules
-
+# node版本
+node_js: stable
+# 设置只监听哪个分支
 branches:
   only:
-    - source 
-
+  - source
+# 缓存，可以节省集成的时间，这里我用了yarn，如果不用可以删除
+cache:
+  apt: true
+  yarn: true
+  directories:
+    - node_modules
+# tarvis生命周期执行顺序详见官网文档
 before_install:
-  - npm install -g hexo-cli
-
-# S: Build Lifecycle
+- git config --global user.name "zhongjinbao"
+- git config --global user.email "zhongjinbao1994@gmail.com"
+# 由于使用了yarn，所以需要下载，如不用yarn这两行可以删除
+- curl -o- -L https://yarnpkg.com/install.sh | bash
+- export PATH=$HOME/.yarn/bin:$PATH
+- npm install -g hexo-cli
 install:
-  - npm install
-  - npm install hexo-deployer-git --save
-
-before_script:
- # - npm install -g gulp
-
+# 不用yarn的话这里改成 npm i 即可
+- yarn
 script:
-  - hexo clean
-  - hexo generate
-
-after_script:
-  - git config user.name "zhongjinbao"
-  - git config user.email "zhongjinbao1994@gmail.com"
-  - sed -i "s/baidu_token/${Baidu_Url_Submit_Token}/g" ./_config.yml
-  - sed -i "s/gh_token/${GH_TOKEN}/g" ./_config.yml
-  - sed -i "s/coding_token/${BLOG_TOKEN}/g" ./_config.yml
-  - cat ./_config.yml
-  - hexo deploy
-# E: Build LifeCycle
+- hexo clean
+- hexo generate
+after_success:
+- cd ./public
+- git init
+- git add --all .
+- git commit -m "Travis CI Auto Builder"
+# 这里的 REPO_TOKEN 即之前在 travis 项目的环境变量里添加的
+- git push --quiet --force https://$REPO_TOKEN@github.com/bornbeauty/bornbeauty.github.io.git
+  master
