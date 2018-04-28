@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="[TOC] 打包流程前言我们每一个产品中一般都是由一位同事来负责打包工作的，其他同学一般是不需要关心具体的流程的。然而掌握打包的知识对我们每一个人都是必要的，以备不时之需。 一般打包有两种方式：  通过开发工具提供的build入口    使用命令行打包 gradle tasksName  不论哪种方式，背后执行的都是一整套Google提供的构建系统。下面我们就来一起看一下这一具体流程。 构建流程">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android打包那些事儿">
+<meta property="og:url" content="https://bornbeauty.github.io/2017/03/04/Android打包那些事儿/index.html">
+<meta property="og:site_name" content="Jimbo`s Blog">
+<meta property="og:description" content="[TOC] 打包流程前言我们每一个产品中一般都是由一位同事来负责打包工作的，其他同学一般是不需要关心具体的流程的。然而掌握打包的知识对我们每一个人都是必要的，以备不时之需。 一般打包有两种方式：  通过开发工具提供的build入口    使用命令行打包 gradle tasksName  不论哪种方式，背后执行的都是一整套Google提供的构建系统。下面我们就来一起看一下这一具体流程。 构建流程">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/711974-a28778095ec44547.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/711974-d18d06104c496365.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/711974-7f8219ced286c65b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/711974-8f7242d157d8a4cb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/711974-f1fe92daf99a726d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/711974-45b799ebfc83ca77.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/711974-a72e8977fc819400.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/711974-b94e2d3bf3cbf7aa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/711974-13e587003f6b2f01.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/711974-cb293afcbda08054.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/711974-cb09a72d6a9309da.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/711974-8399151824ebe185.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-04-28T02:27:51.441Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android打包那些事儿">
+<meta name="twitter:description" content="[TOC] 打包流程前言我们每一个产品中一般都是由一位同事来负责打包工作的，其他同学一般是不需要关心具体的流程的。然而掌握打包的知识对我们每一个人都是必要的，以备不时之需。 一般打包有两种方式：  通过开发工具提供的build入口    使用命令行打包 gradle tasksName  不论哪种方式，背后执行的都是一整套Google提供的构建系统。下面我们就来一起看一下这一具体流程。 构建流程">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/711974-a28778095ec44547.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://bornbeauty.github.io/2017/03/04/Android打包那些事儿/"/>
+
+
+
+
+
+  <title>Android打包那些事儿 | Jimbo`s Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jimbo`s Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://bornbeauty.github.io/2017/03/04/Android打包那些事儿/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jimbo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jimbo`s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android打包那些事儿</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-04T17:39:13+00:00">
+                2017-03-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>[TOC]</p>
+<h4 id="打包流程"><a href="#打包流程" class="headerlink" title="打包流程"></a>打包流程</h4><h5 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h5><p>我们每一个产品中一般都是由一位同事来负责打包工作的，其他同学一般是不需要关心具体的流程的。然而掌握打包的知识对我们每一个人都是必要的，以备不时之需。</p>
+<p>一般打包有两种方式：</p>
+<ul>
+<li>通过开发工具提供的<code>build</code>入口</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/711974-a28778095ec44547.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Android Studio的编译按钮"></p>
+<ul>
+<li>使用命令行打包 <code>gradle tasksName</code></li>
+</ul>
+<p>不论哪种方式，背后执行的都是一整套Google提供的构建系统。下面我们就来一起看一下这一具体流程。</p>
+<h5 id="构建流程"><a href="#构建流程" class="headerlink" title="构建流程"></a>构建流程</h5><p><img src="http://upload-images.jianshu.io/upload_images/711974-d18d06104c496365.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="构建流程简略图"></p>
+<p>上面这个图是Android官方提供的打包简略流程图。清晰地展示了一个Android Project经过编译和打包后生成apk文件，然后再经过签名，就可以安装到设备上。</p>
+<p>具体步骤如下：</p>
+<ol>
+<li>编译器将您的源代码转换成DEX（Dalvik Executable) 文件，将资源文件转换成已编译资源。</li>
+<li>APK打包器将DEX文件和已编译资源合并成单个APK。不过，必须先将APK签名，才能将应用安装并部署到Android设备上。</li>
+<li>APK打包器使用密钥签署APK：<br>   a. 如果构建的APK是debug版本，那么将使用调试密钥签名，Android会默认提供一个debug的密钥。<br>   b. 如果构建的是release版本，会使用发布版本的密钥签名。要生成自己的签名文件发布应用可以参考<a href="https://developer.android.com/studio/publish/app-signing.html?hl=zh-cn#studio" target="_blank" rel="noopener">Android的官方文档</a>。</li>
+<li>在生成最终的APK文件之前还会使用<code>zipalign</code>工具来优化文件。</li>
+</ol>
+<p>生成的APK文件本质还是一个zip文件，只不过被Google强行修改了一下后缀名称而已。所以我们将APK的后缀修改成<code>.zip</code>就可以查看其包含的内容了。如图所示：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/711974-7f8219ced286c65b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="APK包含的文件"></p>
+<ul>
+<li>AndroidManifest.xml</li>
+<li>assets文件夹：这里面的资源是不经过编译原样打包进来的</li>
+<li>classes.dex：这个是Java的字节码文件，Android会将所有的<code>class文件</code>全部放到这一个文件里。</li>
+<li>META-INFO：关于签名的信息存放，应用安装验证签名的时候会验证该文件里面的信息<br>-res：资源文件，是被编译过的。<code>raw和图片</code>是保持原样的，但是其他的文件会被编译成二进制文件。</li>
+<li>resources.arsc：保存资源文件的索引，由aapt生成</li>
+</ul>
+<h5 id="详细流程"><a href="#详细流程" class="headerlink" title="详细流程"></a>详细流程</h5><p><img src="http://upload-images.jianshu.io/upload_images/711974-8f7242d157d8a4cb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="详细流程"></p>
+<h6 id="1-使用aapt进行资源预编译。"><a href="#1-使用aapt进行资源预编译。" class="headerlink" title="1. 使用aapt进行资源预编译。"></a>1. 使用aapt进行资源预编译。</h6><p>打包的第一步就是将资源进行预编译，资源文件包括res文件夹下面的所有文件。在编译的这一步，使用的是aapt工具进行的，编译后将会生成我们常见的R文件。R文件中是资源对应的ID。每一个ID都是根据特殊规则来生成的，由4个字节组成，用十六进制表示：0x PPTTEEEE。其中PP（Package ID）代表的是资源命名空间，TT（ Type ID）是资源类型标识，资源类型有animator、anim、color、drawable、layout、menu、raw、string和xml等等若干种。EEEE（Entry ID）则代表的是每一个资源所出现的顺序，呈现自增长态。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/711974-f1fe92daf99a726d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="R文件"></p>
+<h6 id="2-AIDL文件编译"><a href="#2-AIDL文件编译" class="headerlink" title="2. AIDL文件编译"></a>2. AIDL文件编译</h6><p>AIDL 全称Android Interface definition language。在设计进程之间通信的时候需要用定义aidl文件，统一通信接口。Android打包时会将aidl文件转化为一个同名的java接口。</p>
+<h6 id="3-Java文件编译"><a href="#3-Java文件编译" class="headerlink" title="3. Java文件编译"></a>3. Java文件编译</h6><p>这一步就是标准的Java编译的过程，将.java编译成.class文件。</p>
+<h6 id="4-生成-dex文件"><a href="#4-生成-dex文件" class="headerlink" title="4. 生成.dex文件"></a>4. 生成.dex文件</h6><p>将所有的.class文件（包括第三方库的.class文件）转化成Dalvik文件，即.dex文件。</p>
+<blockquote>
+<p>虽然Android使用Java语言编程。但是Android并不使用标准的Java虚拟机执行java code。Android有自己的虚拟机 Dalvik以及5.0以上的ART。 可以大致了解一下Dalvik虚拟机和传统虚拟机的区别：</p>
+<ul>
+<li>Dalvik虚拟机占用内存更少</li>
+<li>JVM是基于Stack的(Stack based)，DVM是基于Register的(Register based). 更进一步说，JVM将局部变量存在stack中，而DVM将变量保存在register中。因此标准java虚拟机需要更多的指令集，而DVM的指令集更少，另一方面DVM需要用寄存器编码指令的source 和 destination ，因此Dalvik的一条指令更长。</li>
+<li>在JVM运行时，会根据需要去load每个class文件。而Dalvik中所有的class都在一个dex文件中。</li>
+</ul>
+</blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/711974-45b799ebfc83ca77.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=".class文件转化成.dex文件"></p>
+<blockquote>
+<p>这里有一个潜在的危险，由于dex设计上的原因，单个dex内最多能引用的方法数上限为65536，这个数字对于当今很多APP来说都已经不够用了。不过Google也早早就放出了解决方案。这里就不详细讨论了，有兴趣了解可以戳<a href="http://developer.android.com/intl/zh-cn/tools/building/multidex.html" target="_blank" rel="noopener">这里</a>。</p>
+</blockquote>
+<h6 id="5-打包APK"><a href="#5-打包APK" class="headerlink" title="5. 打包APK"></a>5. 打包APK</h6><p>这一步就是讲所有的资源文件，dex文件一起打包，生成APK文件。</p>
+<h6 id="6-签名"><a href="#6-签名" class="headerlink" title="6. 签名"></a>6. 签名</h6><p>第五步生成的APK文件是不能直接安装到Android手机上面的，必须经过签名后才行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ keytool -genkey -v -keystore my-release-key.keystore-alias alias_name -keyalg RSA -keysize 2048 -validity 10000</span><br></pre></td></tr></table></figure>
+<p>生成keytool生成一个<code>keyStore</code>，有效期是10000天。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1-keystore my-release-key.keystore my_application.apk alias_name</span><br></pre></td></tr></table></figure>
+<p>通过jarsinger来对APK签名</p>
+<h6 id="7-对齐"><a href="#7-对齐" class="headerlink" title="7. 对齐"></a>7. 对齐</h6><p>这是打包的最后一步。对apk包进行对齐处理，工具为zipalign。对齐处理即使得所有资源文件距离文件起始偏移为4字节的整数倍，这样通过内存映射访问apk文件时处理速度更快。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zipalign -c -v 4 application.apk</span><br></pre></td></tr></table></figure>
+<p>以上就是Android打包的完成过程。</p>
+<h4 id="多渠道打包"><a href="#多渠道打包" class="headerlink" title="多渠道打包"></a>多渠道打包</h4><h5 id="配置gradle实现多渠道打包"><a href="#配置gradle实现多渠道打包" class="headerlink" title="配置gradle实现多渠道打包"></a>配置gradle实现多渠道打包</h5><p>每当应用发布一个新的版本的时候，我们会分发到每一个应用市场中去，比如，360手机助手，小米应用市场，华为应用市场等。为了能够统计每个应用市场的下载量，活跃量我们必须用一个标记来区分这些不同市场分发下去的应用，渠道号也就应运而生。随着渠道的不断增加，需要生成的渠道包也就越来越多。<br>在打包的过程中，我们一般都是使用gradle来进行的。gradle为我们的打包提高了很多的便利，多渠道打包也可以轻松实现。</p>
+<ol>
+<li>首先在<code>AndroidManifest.xml</code>文件中定义一个<code>meta-data</code></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta-data</span><br><span class="line">    android:name=&quot;CHANNEL&quot;</span><br><span class="line">    android:value=&quot;$&#123;CHANNEL_VALUE&#125;&quot; /&gt;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>然后在gradle文件中设置一下productFlavors</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">android &#123;  </span><br><span class="line">    productFlavors &#123;</span><br><span class="line">        xiaomi &#123;</span><br><span class="line">            manifestPlaceholders = [CHANNEL_VALUE: &quot;xiaomi&quot;]</span><br><span class="line">        &#125;</span><br><span class="line">        _360 &#123;</span><br><span class="line">            manifestPlaceholders = [CHANNEL_VALUE: &quot;_360&quot;]</span><br><span class="line">        &#125;</span><br><span class="line">        baidu &#123;</span><br><span class="line">            manifestPlaceholders = [CHANNEL_VALUE: &quot;baidu&quot;]</span><br><span class="line">        &#125;</span><br><span class="line">        wandoujia &#123;</span><br><span class="line">            manifestPlaceholders = [CHANNEL_VALUE: &quot;wandoujia&quot;]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>productFlavors</code>是为了在同一个项目中创建应用的不同版本。具体的配置信息可以看<a href="https://developer.android.com/studio/build/build-variants.html?hl=zh-cn#product-flavors" target="_blank" rel="noopener">官方说明</a>。</p>
+<ol start="3">
+<li>执行<code>gradle aS</code>就可以将所有的渠道包输出了。</li>
+</ol>
+<h5 id="gradle实现多渠道打包的缺点"><a href="#gradle实现多渠道打包的缺点" class="headerlink" title="gradle实现多渠道打包的缺点"></a>gradle实现多渠道打包的缺点</h5><p>虽然gradle配置多渠道打包很简单，也很方便，但是这种方式存在一个致命的缺陷，那就是费时间。因为<code>AndroidManifest.xml</code>文件被修改过了，所以所有的包都必须重新编译签名。一般来说100个渠道包就要至少一个小时的时间，这一个小时5杯咖啡都不够等的。更要命的是万一哪里需要微调一下代码或者文案，那么不好意思，一切又得重头来。这就很麻烦了，所以有没有什么方法可以快速完成打包呢？我们继续往下看。</p>
+<h4 id="多渠道快速打包"><a href="#多渠道快速打包" class="headerlink" title="多渠道快速打包"></a>多渠道快速打包</h4><h5 id="快速打包方案Version-1-0"><a href="#快速打包方案Version-1-0" class="headerlink" title="快速打包方案Version_1.0"></a>快速打包方案Version_1.0</h5><p>如上所说，我们去到信息只是修改了一下manifest文件里面的一个meta-data的值而已，有没有什么办法可以不需要重新构建代码呢？答案是肯定的。我们可以使用<code>apktool</code>，反编译我们的APK文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apktool d yourApkName build</span><br></pre></td></tr></table></figure>
+<p>经过解码后，我们会得到如下文件：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/711974-a72e8977fc819400.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="解码后的APK文件"></p>
+<p>我们发现我们需要修改的manifest文件就在里面，所以通过命令可以修改下他的内容，然后重新打包，就可以生成一个全新的渠道包了，省去了重新编译构建代码的过程。使用一下Python脚本，将manifest文件里面channel信息进行替换。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import re</span><br><span class="line"></span><br><span class="line">def replace_channel(channel, manifest):</span><br><span class="line">    pattern = r&apos;(&lt;meta-data\s+android:name=&quot;channel&quot;\s+android:value=&quot;)(\S+)(&quot;\s+/&gt;)&apos;</span><br><span class="line">    replacement = r&quot;\g&lt;1&gt;&#123;channel&#125;\g&lt;3&gt;&quot;.format(channel=channel)</span><br><span class="line">    return re.sub(pattern, replacement, manifest)</span><br></pre></td></tr></table></figure>
+<p>然后通过<code>apktool</code>重新将文件夹打包生成APK。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apktool b build your_unsigned_apk</span><br></pre></td></tr></table></figure>
+<p>最后，使用jarsigner重新签名apk：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jarsigner -sigalg MD5withRSA -digestalg SHA1 -keystore your_keystore_path -storepass your_storepass -signedjar your_signed_apk, your_unsigned_apk, your_alias</span><br></pre></td></tr></table></figure>
+<p>通过这上面的一系列过程，我们可以实现不重新编译构建项目就生成不同的渠道包。这会节省很多的时间。但是随着渠道包增加，重新签名也会占用很大一部分时间，那能不能不重新签名呢？</p>
+<p>分析签名的算法后发现，在打包过程后的META-INF文件夹下面添加空白文件是不会对签名的结果产生影响的。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/711974-b94e2d3bf3cbf7aa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="APK解压文件"></p>
+<p>所以我们只要像META_INF文件夹里面写入空白的文件来标识渠道号就可以了。</p>
+<p>通过Python脚本像APK文件中写入渠道：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import zipfile</span><br><span class="line">zipped = zipfile.ZipFile(your_apk, &apos;a&apos;, zipfile.ZIP_DEFLATED) </span><br><span class="line">empty_channel_file = &quot;META-INF/mtchannel_&#123;channel&#125;&quot;.format(channel=your_channel)</span><br><span class="line">zipped.write(your_empty_file, empty_channel_file)</span><br></pre></td></tr></table></figure>
+<p>执行后会在META-INF文件夹下面生成一个空白文件：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/711974-13e587003f6b2f01.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="生成空白文件"></p>
+<p>然后我们在项目中去读取这个空白文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">public static String getChannel(Context context) &#123;</span><br><span class="line">        ApplicationInfo appinfo = context.getApplicationInfo();</span><br><span class="line">        String sourceDir = appinfo.sourceDir;</span><br><span class="line">        String ret = &quot;&quot;;</span><br><span class="line">        ZipFile zipfile = null;</span><br><span class="line">        try &#123;</span><br><span class="line">            zipfile = new ZipFile(sourceDir);</span><br><span class="line">            Enumeration&lt;?&gt; entries = zipfile.entries();</span><br><span class="line">            while (entries.hasMoreElements()) &#123;</span><br><span class="line">                ZipEntry entry = ((ZipEntry) entries.nextElement());</span><br><span class="line">                String entryName = entry.getName();</span><br><span class="line">                if (entryName.startsWith(&quot;mtchannel&quot;)) &#123;</span><br><span class="line">                    ret = entryName;</span><br><span class="line">                    break;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; catch (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; finally &#123;</span><br><span class="line">            if (zipfile != null) &#123;</span><br><span class="line">                try &#123;</span><br><span class="line">                    zipfile.close();</span><br><span class="line">                &#125; catch (IOException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        String[] split = ret.split(&quot;_&quot;);</span><br><span class="line">        if (split != null &amp;&amp; split.length &gt;= 2) &#123;</span><br><span class="line">            return ret.substring(split[0].length() + 1);</span><br><span class="line"></span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            return &quot;&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>这样每生成一个渠道包只需要复制一下APK，然后添加一个空态的文件到META-INF下面就可以了，这样100个渠道包一分钟之内就可以搞定了。</p>
+<p>具体的原因可以看下<a href="http://blog.csdn.net/jiangwei0910410003/article/details/50402000" target="_blank" rel="noopener">这里</a>。</p>
+<h5 id="快速打包方案Version-2-0"><a href="#快速打包方案Version-2-0" class="headerlink" title="快速打包方案Version_2.0"></a>快速打包方案Version_2.0</h5><p>上面的方案基本上已经比较完美的解决我们打包的问题了，然而好景不长，Google在Android 7.0中更新了应用的签名算法-<a href="https://source.android.com/security/apksigning/v2" target="_blank" rel="noopener">APK Signature Scheme v2</a>，它是一个对全文件进行签名的方案，能提供更快的应用安装时间、对未授权APK文件的更改提供更多保护，在默认情况下，Android Gradle 2.2.0插件会使用APK Signature Scheme v2和传统签名方案来签署你的应用。因为是对全文件进行签名的，所以之前的添加空白文件的方案就没有作用了。</p>
+<p>不过目前这个方案还不是强制性的，我们可以选择在gradle配置文件中将其关闭：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">android &#123;</span><br><span class="line">    defaultConfig &#123; ... &#125;</span><br><span class="line">    signingConfigs &#123;</span><br><span class="line">      release &#123;</span><br><span class="line">        storeFile file(&quot;myreleasekey.keystore&quot;)</span><br><span class="line">        storePassword &quot;password&quot;</span><br><span class="line">        keyAlias &quot;MyReleaseKey&quot;</span><br><span class="line">        keyPassword &quot;password&quot;</span><br><span class="line">        v2SigningEnabled false</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>那么新的签名方案对已有的渠道生成方案有什么影响呢？下图是新的应用签名方案和旧的签名方案的一个对比：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/711974-cb293afcbda08054.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="v1和v2版本签名对比"></p>
+<p>新的签名方案会在ZIP文件格式的 Central Directory 区块所在文件位置的前面添加一个APK Signing Block区块，下面按照ZIP文件的格式来分析新应用签名方案签名后的APK包。<br>整个APK（ZIP文件格式）会被分为以下四个区块：</p>
+<ol>
+<li>Contents of ZIP entries（from offset 0 until the start of APK Signing Block）</li>
+<li>APK Signing Block</li>
+<li>ZIP Central Directory</li>
+<li>ZIP End of Central Directory</li>
+</ol>
+<p>新应用签名方案的签名信息会被保存在区块2（APK Signing Block）中， 而区块1（Contents of ZIP entries）、区块3（ZIP Central Directory）、区块4（ZIP End of Central Directory）是受保护的，在签名后任何对区块1、3、4的修改都逃不过新的应用签名方案的检查。</p>
+<p>之前的渠道包生成方案是通过在META-INF目录下添加空文件，用空文件的名称来作为渠道的唯一标识，之前在META-INF下添加文件是不需要重新签名应用的，这样会节省不少打包的时间，从而提高打渠道包的速度。但在新的应用签名方案下META-INF已经被列入了保护区了，向META-INF添加空文件的方案会对区块1、3、4都会有影响，新应用签名方案签署的应用经过我们旧的生成渠道包方案处理后，在安装时会报以下错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Failure [INSTALL_PARSE_FAILED_NO_CERTIFICATES: </span><br><span class="line">Failed to collect certificates from base.apk: META-INF/CERT.SF indicates base.apk is signed using APK Signature Scheme v2, </span><br><span class="line">but no such signature was found. Signature stripped?]</span><br></pre></td></tr></table></figure>
+<p>区块1，3，4是受保护的，任何的修改都会引起签名的不一致，但是区块2是不受保护的，所以能不能在区块2上面找到解决办法呢？首先看一下区块2的文件结构：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/711974-cb09a72d6a9309da.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="区块2文件结构"></p>
+<p>区块2中APK Signing Block是由这几部分组成：2个用来标示这个区块长度的8字节 ＋ 这个区块的魔数（APK Sig Block 42）+ 这个区块所承载的数据（ID-value）。</p>
+<p>我们重点来看一下这个ID-value，它由一个8字节的长度标示＋4字节的ID＋它的负载组成。V2的签名信息是以ID（0x7109871a）的ID-value来保存在这个区块中，不知大家有没有注意这是一组ID-value，也就是说它是可以有若干个这样的ID-value来组成，那我们是不是可以在这里做一些文章呢？</p>
+<p>对于签名的认证过程是这样的：</p>
+<ol>
+<li>寻找APK Signing Block，如果能够找到，则进行验证，验证成功则继续进行安装，如果失败了则终止安装</li>
+<li>如果未找到APK Signing Block，则执行原来的签名验证机制，也是验证成功则继续进行安装，如果失败了则终止安装</li>
+</ol>
+<p><img src="http://upload-images.jianshu.io/upload_images/711974-8399151824ebe185.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="签名认证过程"></p>
+<p>在校验的时候，检验代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">public static ByteBuffer findApkSignatureSchemeV2Block(</span><br><span class="line">           ByteBuffer apkSigningBlock,</span><br><span class="line">           Result result) throws SignatureNotFoundException &#123;</span><br><span class="line">       checkByteOrderLittleEndian(apkSigningBlock);</span><br><span class="line">       // FORMAT:</span><br><span class="line">       // OFFSET       DATA TYPE  DESCRIPTION</span><br><span class="line">       // * @+0  bytes uint64:    size in bytes (excluding this field)</span><br><span class="line">       // * @+8  bytes pairs</span><br><span class="line">       // * @-24 bytes uint64:    size in bytes (same as the one above)</span><br><span class="line">       // * @-16 bytes uint128:   magic</span><br><span class="line">       ByteBuffer pairs = sliceFromTo(apkSigningBlock, 8, apkSigningBlock.capacity() - 24);</span><br><span class="line"></span><br><span class="line">       int entryCount = 0;</span><br><span class="line">       while (pairs.hasRemaining()) &#123;</span><br><span class="line">           entryCount++;</span><br><span class="line">           if (pairs.remaining() &lt; 8) &#123;</span><br><span class="line">               throw new SignatureNotFoundException(</span><br><span class="line">                       &quot;Insufficient data to read size of APK Signing Block entry #&quot; + entryCount);</span><br><span class="line">           &#125;</span><br><span class="line">           long lenLong = pairs.getLong();</span><br><span class="line">           if ((lenLong &lt; 4) || (lenLong &gt; Integer.MAX_VALUE)) &#123;</span><br><span class="line">               throw new SignatureNotFoundException(</span><br><span class="line">                       &quot;APK Signing Block entry #&quot; + entryCount</span><br><span class="line">                               + &quot; size out of range: &quot; + lenLong);</span><br><span class="line">           &#125;</span><br><span class="line">           int len = (int) lenLong;</span><br><span class="line">           int nextEntryPos = pairs.position() + len;</span><br><span class="line">           if (len &gt; pairs.remaining()) &#123;</span><br><span class="line">               throw new SignatureNotFoundException(</span><br><span class="line">                       &quot;APK Signing Block entry #&quot; + entryCount + &quot; size out of range: &quot; + len</span><br><span class="line">                               + &quot;, available: &quot; + pairs.remaining());</span><br><span class="line">           &#125;</span><br><span class="line">           int id = pairs.getInt();</span><br><span class="line">           if (id == APK_SIGNATURE_SCHEME_V2_BLOCK_ID) &#123;</span><br><span class="line">               return getByteBuffer(pairs, len - 4);</span><br><span class="line">           &#125;</span><br><span class="line">           result.addWarning(Issue.APK_SIG_BLOCK_UNKNOWN_ENTRY_ID, id);</span><br><span class="line">           pairs.position(nextEntryPos);</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       throw new SignatureNotFoundException(</span><br><span class="line">               &quot;No APK Signature Scheme v2 block in APK Signing Block&quot;);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以发现，述代码中关键的一个位置是 if (id == APK_SIGNATURE_SCHEME_V2_BLOCK_ID) {return getByteBuffer(pairs, len - 4);}，通过源代码可以看出Android是通过查找ID为 APK_SIGNATURE_SCHEME_V2_BLOCK_ID = 0x7109871a 的ID-value，来获取APK Signature Scheme v2 Block，对这个区块中其他的ID-value选择了忽略。也就是说，在<a href="https://source.android.com/security/apksigning/v2.html" target="_blank" rel="noopener">APK Signature Scheme v2</a>中没有看到对无法识别的ID，有相关处理的介绍。所以我们可以通过写入自定义的ID-Value来自定义渠道。</p>
+<p>所以整理一下思路应该是这样的：</p>
+<ol>
+<li>对新的应用签名方案生成的APK包中的ID-value进行扩展，提供自定义ID－value（渠道信息），并保存在APK中</li>
+<li>在App运行阶段，可以通过ZIP的EOCD（End of central directory）、Central directory等结构中的信息找到我们自己添加的ID-value，从而实现获取渠道信息的功能</li>
+</ol>
+<p>通过这个方案我们同样可以实现不重新构建不重新签名就能生成渠道包。美团提供了walle供我们使用，详细使用方法<a href="https://github.com/Meituan-Dianping/walle" target="_blank" rel="noopener">点这里</a>。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/11/关于dp px dip单位以及屏幕适配/" rel="next" title="关于dp px dip单位以及屏幕适配">
+                <i class="fa fa-chevron-left"></i> 关于dp px dip单位以及屏幕适配
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/11/android-blogs/" rel="prev" title="android资料整理">
+                android资料整理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Jimbo</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/bornbeauty" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="zhongjinbao1994@gmail.com" target="_blank" title="email">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>email</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://plus.google.com/yourname" target="_blank" title="Google">
+                      
+                        <i class="fa fa-fw fa-google"></i>Google</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/zhongjinbao1994" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://stackoverflow.com/users/6255622/%E9%92%9F%E9%87%91%E5%AE%9D" target="_blank" title="StackOverflow">
+                      
+                        <i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#打包流程"><span class="nav-number">1.</span> <span class="nav-text">打包流程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#前言"><span class="nav-number">1.1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#构建流程"><span class="nav-number">1.2.</span> <span class="nav-text">构建流程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#详细流程"><span class="nav-number">1.3.</span> <span class="nav-text">详细流程</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-使用aapt进行资源预编译。"><span class="nav-number">1.3.1.</span> <span class="nav-text">1. 使用aapt进行资源预编译。</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-AIDL文件编译"><span class="nav-number">1.3.2.</span> <span class="nav-text">2. AIDL文件编译</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-Java文件编译"><span class="nav-number">1.3.3.</span> <span class="nav-text">3. Java文件编译</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-生成-dex文件"><span class="nav-number">1.3.4.</span> <span class="nav-text">4. 生成.dex文件</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#5-打包APK"><span class="nav-number">1.3.5.</span> <span class="nav-text">5. 打包APK</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#6-签名"><span class="nav-number">1.3.6.</span> <span class="nav-text">6. 签名</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#7-对齐"><span class="nav-number">1.3.7.</span> <span class="nav-text">7. 对齐</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多渠道打包"><span class="nav-number">2.</span> <span class="nav-text">多渠道打包</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#配置gradle实现多渠道打包"><span class="nav-number">2.1.</span> <span class="nav-text">配置gradle实现多渠道打包</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#gradle实现多渠道打包的缺点"><span class="nav-number">2.2.</span> <span class="nav-text">gradle实现多渠道打包的缺点</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多渠道快速打包"><span class="nav-number">3.</span> <span class="nav-text">多渠道快速打包</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#快速打包方案Version-1-0"><span class="nav-number">3.1.</span> <span class="nav-text">快速打包方案Version_1.0</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#快速打包方案Version-2-0"><span class="nav-number">3.2.</span> <span class="nav-text">快速打包方案Version_2.0</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jimbo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

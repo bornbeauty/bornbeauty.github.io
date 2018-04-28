@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="实现nextDay算法">
+<meta name="keywords" content="java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算nextDay的实现">
+<meta property="og:url" content="https://bornbeauty.github.io/2016/09/15/java-nextday/index.html">
+<meta property="og:site_name" content="Jimbo`s Blog">
+<meta property="og:description" content="实现nextDay算法">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-04-28T02:27:51.441Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="计算nextDay的实现">
+<meta name="twitter:description" content="实现nextDay算法">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://bornbeauty.github.io/2016/09/15/java-nextday/"/>
+
+
+
+
+
+  <title>计算nextDay的实现 | Jimbo`s Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jimbo`s Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://bornbeauty.github.io/2016/09/15/java-nextday/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jimbo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jimbo`s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">计算nextDay的实现</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-15T00:00:00+00:00">
+                2016-09-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  实现nextDay算法
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>实现nextDay算法</p>
+</blockquote>
+<h2 id="1-题目要求"><a href="#1-题目要求" class="headerlink" title="1.题目要求"></a>1.题目要求</h2><p>用户从键盘输入”2014/11/11”,然后输出该输入的下一天日期是多少.<br>要求很简单,看上去也不是很复杂,但是要考虑到闰年,月份进位等等问题.</p>
+<h2 id="2-思路分析"><a href="#2-思路分析" class="headerlink" title="2.思路分析"></a>2.思路分析</h2><ul>
+<li>用户输入合法性问题</li>
+<li>nextDay的推算算法</li>
+</ul>
+<p>我们先看第一个问题:<br>这个比较简单,我们可以使用正则表达式来匹配用户的输入,当然了,只是正则表达式可能还无法完全约束合法,我们可以继续针对个别的在正确的校验.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//使用分隔符&apos;/&apos;分割年月日</span><br><span class="line">//年份可以使用09或者2009这样的形式 月份使用1或者01 日使用01或者1</span><br><span class="line">//至少有一位 至多有两位</span><br><span class="line">//则可以得到下面的匹配规则</span><br><span class="line">String pattern = &quot;^(([0-9][0-9])|([1-2][0,9][0-9][0-9]))\\/(([1-9])|(0[1-9])|(1[0-2]))\\/(([0-9])|([0-2][0-9])|(3[0-1]))$&quot;;</span><br></pre></td></tr></table></figure>
+<p>这样,就可以得到一个合法的类似于”2013/14/22”这样的字符串,但是我们发现,14月仍然是不合法的,仍需我们再次校验合法性.于是,可以封装三个函数:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public static boolean isLegalYear(int year) &#123;</span><br><span class="line">	return year &gt;= 1900 &amp;&amp; year &lt; 3000;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static boolean isLegalMonth(int month) &#123;</span><br><span class="line">	return month &lt;= 12 &amp;&amp; month &gt; 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static boolean isLegalDay(int month, int day) &#123;</span><br><span class="line">	return mapDay.get(month).intValue() &gt;= day;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样,我们就可以得到一个正确合法的输入日期,然后就可以依照算法,计算下一天.</p>
+<p>再看第二个问题:<br>算法说起来也比较简单,类似于一个加法器,只是各个位置上的进位法则不一样而已.</p>
+<ul>
+<li>将day自加1<ul>
+<li>若day合法,返回该data</li>
+<li>若day不合法,day赋值为1,month自加1<ul>
+<li>若month合法,返回该data</li>
+<li>若month不合法,month赋值为1,year自加,返回data</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>经过上述算法计算,即可得到正确的日期了.</p>
+<h2 id="3-具体实现"><a href="#3-具体实现" class="headerlink" title="3.具体实现"></a>3.具体实现</h2><p>首先封装一个data数据类:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">class MyData &#123;</span><br><span class="line">	public MyData(int year, int month, int day) &#123;</span><br><span class="line">		this.day = day;</span><br><span class="line">		this.month = month;</span><br><span class="line">		this.year = year;</span><br><span class="line">	&#125;</span><br><span class="line">	public int year;</span><br><span class="line">	public int month;</span><br><span class="line">	public int day;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line">import java.util.*;</span><br><span class="line">import java.util.regex.*;</span><br><span class="line"></span><br><span class="line">public class NextDay&#123;</span><br><span class="line"></span><br><span class="line">	public static Map&lt;Integer, Integer&gt; mapDay = new HashMap&lt;Integer, Integer&gt;()&#123;</span><br><span class="line">		&#123;</span><br><span class="line">			put(1, 31); put(2, 28); put(3, 31); put(4, 30);</span><br><span class="line">			put(5, 31); put(6, 30); put(7, 31); put(8, 31);</span><br><span class="line">			put(9, 30); put(10, 31); put(11, 30); put(12, 31);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;;</span><br><span class="line"></span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		MyData d = getNextData(getData());</span><br><span class="line">		System.out.println(d.year+&quot;-&quot;+d.month+&quot;-&quot;+d.day);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	public static MyData getNextData(MyData data) &#123;</span><br><span class="line">		data.day++;</span><br><span class="line">		if (isLegalDay(data.month, data.day)) &#123;</span><br><span class="line">			return data;	</span><br><span class="line">		&#125; else &#123;</span><br><span class="line">			data.day = 1;</span><br><span class="line">			data.month++;</span><br><span class="line">			if (isLegalMonth(data.month)) &#123;</span><br><span class="line">				return data;</span><br><span class="line">			&#125; else &#123;</span><br><span class="line">				data.month = 1;</span><br><span class="line">				data.year++;</span><br><span class="line">				return data;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	public static MyData getData() &#123;</span><br><span class="line">		// get input from keyboard</span><br><span class="line">		Scanner s = new Scanner(System.in);</span><br><span class="line">		// month/day/year</span><br><span class="line">		String input = s.next();</span><br><span class="line">		// using Regular Expression to verify input</span><br><span class="line">		String pattern = &quot;^(([0-9][0-9])|([1-2][0,9][0-9][0-9]))\\/(([1-9])|(0[1-9])|(1[0-2]))\\/(([0-9])|([0-2][0-9])|(3[0-1]))$&quot;;</span><br><span class="line">		Matcher m = Pattern.compile(pattern).matcher(input);</span><br><span class="line">		if (m.matches()) &#123;</span><br><span class="line">			String[] data = input.split(&quot;/&quot;);</span><br><span class="line">			int year = Integer.parseInt(data[0]);</span><br><span class="line">			int month = Integer.parseInt(data[1]);</span><br><span class="line">			int day = Integer.parseInt(data[2]);</span><br><span class="line">			if (isLeapYear(year)) &#123;</span><br><span class="line">				mapDay.put(2, 29);</span><br><span class="line">			&#125;</span><br><span class="line">			if (isLegalYear(year) &amp;&amp; isLegalMonth(month) &amp;&amp; isLegalDay(month, day)) &#123;</span><br><span class="line">				MyData d = new MyData(year, month, day);</span><br><span class="line">				return d;</span><br><span class="line">			&#125; else &#123;</span><br><span class="line">				System.out.println(&quot;your input is illegal!&quot;);</span><br><span class="line">				System.exit(-1);</span><br><span class="line">				return null;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125; else &#123;</span><br><span class="line">			System.out.println(&quot;your input format is worry!&quot;);</span><br><span class="line">			System.exit(-1);</span><br><span class="line">			return null;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; </span><br><span class="line"></span><br><span class="line">	public static boolean isLegalYear(int year) &#123;</span><br><span class="line">		return year &gt;= 1900 &amp;&amp; year &lt; 3000;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	public static boolean isLegalMonth(int month) &#123;</span><br><span class="line">		return month &lt;= 12 &amp;&amp; month &gt; 0;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	public static boolean isLegalDay(int month, int day) &#123;</span><br><span class="line">		return mapDay.get(month).intValue() &gt;= day;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	public static boolean isLeapYear(int year) &#123;</span><br><span class="line">		return (year % 400 == 0) || (year % 4 == 0 &amp;&amp; year % 100 != 0);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/02/life-respectEveryone/" rel="next" title="否定别人是很愚蠢的">
+                <i class="fa fa-chevron-left"></i> 否定别人是很愚蠢的
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/10/09/android-launchermode/" rel="prev" title="定义Activity启动模式的两种方式">
+                定义Activity启动模式的两种方式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Jimbo</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/bornbeauty" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="zhongjinbao1994@gmail.com" target="_blank" title="email">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>email</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://plus.google.com/yourname" target="_blank" title="Google">
+                      
+                        <i class="fa fa-fw fa-google"></i>Google</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/zhongjinbao1994" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://stackoverflow.com/users/6255622/%E9%92%9F%E9%87%91%E5%AE%9D" target="_blank" title="StackOverflow">
+                      
+                        <i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-题目要求"><span class="nav-number">1.</span> <span class="nav-text">1.题目要求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-思路分析"><span class="nav-number">2.</span> <span class="nav-text">2.思路分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-具体实现"><span class="nav-number">3.</span> <span class="nav-text">3.具体实现</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jimbo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

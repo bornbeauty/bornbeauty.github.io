@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="一个很简单的括号语法检查器  1.实现效果首先我们先看一下我们实现的效果是什么样子的。我们要实现的功能如下，  检查代码中括号的使用是否合法 指出括号使用出现了什么错误 指出哪个括号出现了问题，在行中找出他的位置  2.核心算法核心算法并不是很复杂，如下  遍历整个字符串序列 若遇到左括号，如“（”和“{”，则将其入栈 若遇到右括号，如“）”和“}”，则获取到栈顶元素s 如果当前元素c与s是匹配">
+<meta name="keywords" content="java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="简单的括号检查程序">
+<meta property="og:url" content="https://bornbeauty.github.io/2015/11/09/java-comeputerTestHomework/index.html">
+<meta property="og:site_name" content="Jimbo`s Blog">
+<meta property="og:description" content="一个很简单的括号语法检查器  1.实现效果首先我们先看一下我们实现的效果是什么样子的。我们要实现的功能如下，  检查代码中括号的使用是否合法 指出括号使用出现了什么错误 指出哪个括号出现了问题，在行中找出他的位置  2.核心算法核心算法并不是很复杂，如下  遍历整个字符串序列 若遇到左括号，如“（”和“{”，则将其入栈 若遇到右括号，如“）”和“}”，则获取到栈顶元素s 如果当前元素c与s是匹配">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7xjtan.com1.z0.glb.clouddn.com/testHomework-1.png">
+<meta property="og:updated_time" content="2018-04-28T02:27:51.441Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="简单的括号检查程序">
+<meta name="twitter:description" content="一个很简单的括号语法检查器  1.实现效果首先我们先看一下我们实现的效果是什么样子的。我们要实现的功能如下，  检查代码中括号的使用是否合法 指出括号使用出现了什么错误 指出哪个括号出现了问题，在行中找出他的位置  2.核心算法核心算法并不是很复杂，如下  遍历整个字符串序列 若遇到左括号，如“（”和“{”，则将其入栈 若遇到右括号，如“）”和“}”，则获取到栈顶元素s 如果当前元素c与s是匹配">
+<meta name="twitter:image" content="http://7xjtan.com1.z0.glb.clouddn.com/testHomework-1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://bornbeauty.github.io/2015/11/09/java-comeputerTestHomework/"/>
+
+
+
+
+
+  <title>简单的括号检查程序 | Jimbo`s Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jimbo`s Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://bornbeauty.github.io/2015/11/09/java-comeputerTestHomework/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jimbo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jimbo`s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">简单的括号检查程序</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-11-09T00:00:00+00:00">
+                2015-11-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>一个很简单的括号语法检查器</p>
+</blockquote>
+<h2 id="1-实现效果"><a href="#1-实现效果" class="headerlink" title="1.实现效果"></a><strong><em>1.实现效果</em></strong></h2><p>首先我们先看一下我们实现的效果是什么样子的。<br><img src="http://7xjtan.com1.z0.glb.clouddn.com/testHomework-1.png" alt=""><br>我们要实现的功能如下，</p>
+<ol>
+<li>检查代码中括号的使用是否合法</li>
+<li>指出括号使用出现了什么错误</li>
+<li>指出哪个括号出现了问题，在行中找出他的位置</li>
+</ol>
+<h2 id="2-核心算法"><a href="#2-核心算法" class="headerlink" title="2.核心算法"></a><strong><em>2.核心算法</em></strong></h2><p><strong>核心算法</strong>并不是很复杂，如下</p>
+<ul>
+<li>遍历整个字符串序列<ul>
+<li>若遇到左括号，如“（”和“{”，则将其入栈</li>
+<li>若遇到右括号，如“）”和“}”，则获取到栈顶元素s<ul>
+<li>如果当前元素c与s是匹配的，则说明这里括号使用没有语法错误</li>
+<li>如果当前元素c与s不匹配，则说明这里的括号使用有语法错误，需要记录错误信息</li>
+</ul>
+</li>
+<li>否则就不处理，直接跳过该元素</li>
+</ul>
+</li>
+<li>遍历结束后检查栈<ul>
+<li>如果栈为空，则说明没有语法错误</li>
+<li>如果栈不为空，则说明有语法错误，需要记录错误信息</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-思路分析"><a href="#3-思路分析" class="headerlink" title="3.思路分析"></a><strong><em>3.思路分析</em></strong></h2><p>我们首先按照算法理一下思路：</p>
+<ol>
+<li>我们要获取到文件里的字符信息，这里就要用到文件读写的内容；我打算包装一个<strong>ReadFile</strong>类，让他完成这些工作。</li>
+<li>对于这个程序我们关心的数据有括号、括号所在行号、括号所在行的内容以及括号在行里的位置；把这些数据封装成实体类<strong>SymbolEntity</strong>。</li>
+<li>这检查过程中我们还需要产生错误信息，这个错误信息也需要包装成类<strong>ErrorDescription</strong></li>
+<li>最后就是最核心的检查功能了，我们把他封装成<strong>CheckUtil</strong>类；这个类实现检测功能和错误信息生成功能；</li>
+</ol>
+<h2 id="4-具体实现"><a href="#4-具体实现" class="headerlink" title="4.具体实现"></a><strong><em>4.具体实现</em></strong></h2><blockquote>
+<p>SymbolEntity.java类</p>
+</blockquote>
+<pre><code>public class SymbolEntity {
+    private String symbol;
+    private int lineNumber;
+    private String lineContent;
+    private int symbolNumber;
+
+    public SymbolEntity(String symbol, int lineNumber, String lineContent, int symbolNumber) {
+        this.symbol = symbol;
+        this.lineNumber = lineNumber;
+        this.lineContent = lineContent;
+        this.symbolNumber = symbolNumber;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public int getLineNumber() {
+        return lineNumber;
+    }
+
+    public String getLineContent() {
+        return lineContent;
+    }
+
+    public int getSymbolNumber() {
+        return symbolNumber;
+    }
+}
+</code></pre><blockquote>
+<p>ErrorDescription.java类</p>
+</blockquote>
+<pre><code> public class ErrorDescription {
+    private int errorLineNumber;
+    private String errorDes;
+
+    public ErrorDescription() {
+    }
+
+    public ErrorDescription(int errorLineNumber, String errorDes) {
+        this.errorLineNumber = errorLineNumber;
+        this.errorDes = errorDes;
+    }
+
+    public int getErrorLineNumber() {
+        return errorLineNumber;
+    }
+
+    public String getErrorDes() {
+        return errorDes;
+    }
+
+    public void setErrorLineNumber(int errorLineNumber) {
+        this.errorLineNumber = errorLineNumber;
+    }
+
+    public void setErrorDes() {
+        this.errorDes = errorDes;
+    }
+}
+</code></pre><blockquote>
+<p>CheckUtil.java类</p>
+</blockquote>
+<pre><code>import java.util.Stack;
+import java.util.*;
+import java.io.IOException;
+//要注意在代码或者注释中出现的&apos;{&apos;,&apos;}&apos;,&apos;(&apos;,&apos;)&apos;，也会影响我们的判断
+// {    123
+// }   125
+// (    40
+// )    41
+
+//故意出一个错误
+// {
+public class CheckUtil {
+    private List&lt;ErrorDescription&gt; mErrorList = new ArrayList&lt;&gt;();
+    private String mFileName;
+    private ReadFile mReadFile;
+    private Stack&lt;SymbolEntity&gt; mStack = new Stack();
+    private boolean isOverCheck = false;
+
+    public CheckUtil(ReadFile mReadFile) {
+        this.mReadFile = mReadFile;
+        mFileName = mReadFile.getFileName();
+    }
+
+    public CheckUtil(String mFileName) throws NullPointerException, Exception {
+        this.mFileName = mFileName;
+        mReadFile = new ReadFile(mFileName);
+    }
+
+    public boolean startCheck() throws IOException {
+
+        String lineContent = &quot;&quot;;
+
+        while(null != (lineContent = mReadFile.next())) {
+            for (int i = 0; i &lt; lineContent.length(); i++) {
+                switch(lineContent.charAt(i)) {
+                    case 123: 
+                        mStack.push(new SymbolEntity(String.valueOf((char)123), 
+                        mReadFile.getLineNumber(),
+                        lineContent,
+                        i+1));
+                        break;
+                    case 40:
+                        mStack.push(new SymbolEntity(String.valueOf((char)40), 
+                        mReadFile.getLineNumber(),
+                        lineContent,
+                        i+1));
+                        break;
+                    case 125:
+                        dealChar((char)125, (char)123, lineContent, i+1);
+                        break;
+                    case 41:
+                        dealChar((char)41, (char)40, lineContent, i+1);
+                        break;
+                }
+            }
+        }
+
+        while (!mStack.isEmpty()) {
+            SymbolEntity entity = mStack.pop();
+            switch(entity.getSymbol().charAt(0)) {
+                case 123:
+                    buildError(entity, (char)125);
+                    break;
+                case 40:
+                    buildError(entity, (char)41);
+                    break;
+            }
+        }
+
+        isOverCheck = true;
+
+        if (0 == mErrorList.size()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void dealChar(char currentChar, char oppositeSymbol, String lineContent, int symbolNumber) {
+
+        if (!mStack.isEmpty()) {
+            SymbolEntity entity = mStack.peek();
+            if (entity.getSymbol().charAt(0) != oppositeSymbol) {
+                buildError(new SymbolEntity(String.valueOf(currentChar), 
+                mReadFile.getLineNumber(), lineContent, symbolNumber), oppositeSymbol);        
+            } else {
+                mStack.pop();
+            }    
+        } else {
+            buildError(new SymbolEntity(String.valueOf(currentChar), 
+                mReadFile.getLineNumber(), lineContent, symbolNumber), oppositeSymbol);    
+        }
+    }
+
+    private void buildError(SymbolEntity entity, char missSymbol) {
+        //在什么什么文件里，第多少多少行的什么没有什么与之配对
+        String result = &quot;在&quot; + mFileName + &quot;中,&quot; + &quot;第&quot; + (entity.getLineNumber()+1) +
+            &quot;行的\&quot;&quot; + entity.getSymbol() + &quot;\&quot;没有\&quot;&quot; + missSymbol + &quot;\&quot;与之配对\n&quot;
+            + entity.getLineContent() + &quot;\n&quot;;
+
+        for (int i = 1; i &lt; entity.getSymbolNumber(); i++) {
+            result += &quot; &quot;;
+        }
+
+        result += &quot;^&quot;;
+
+        mErrorList.add(new ErrorDescription(
+                entity.getLineNumber(),
+                result)
+        );
+    }    
+
+    public boolean isChecked() {
+        return isOverCheck;
+    }
+
+    public List&lt;ErrorDescription&gt; getErrorList() {
+        if (isOverCheck) {
+            return mErrorList;
+        } else {
+            return null;
+        }
+    }
+}
+</code></pre><blockquote>
+<p>ReadFile.java类</p>
+</blockquote>
+<pre><code>import java.io.*;
+
+public class ReadFile {
+    //{
+    private String mFileName;            // file path
+    private int mCurrentLine = 0;            // current line number
+    private BufferedReader mBufferReader;    // read file class
+
+    public ReadFile() {
+    }
+
+    public ReadFile(String mFileName) throws NullPointerException,Exception {
+        if (null == mFileName) {
+            throw new NullPointerException(&quot;file name is not allowed to be null&quot;);
+        }
+
+        if (!(new File(mFileName).isFile())) {
+            throw new Exception(&quot;this filename is not a file&quot;);
+        }
+
+        this.mFileName = mFileName;
+
+        mBufferReader = new BufferedReader(new 
+        FileReader(mFileName));
+    }
+
+    public String next() throws IOException {
+        mCurrentLine++;
+        return mBufferReader.readLine();
+    }
+
+    public int getLineNumber() {
+        return mCurrentLine;
+    }
+
+    public String getFileName() {
+        return mFileName;
+    }
+}
+</code></pre><blockquote>
+<p>Main.java类 该类就是来测试其他类</p>
+</blockquote>
+<pre><code>import java.util.*;
+import java.io.*;
+import java.util.regex.*;
+
+public class Main{
+    public static void main(String[] args) {
+
+        File file = file = new File(&quot;.&quot;);
+        final String regex = &quot;.java&quot;;
+        String[] list = file.list(new FilenameFilter() {
+            @Override
+            public boolean accept(File file, String name) {
+                return name.contains(regex);
+            }
+        });
+
+        Arrays.sort(list, String.CASE_INSENSITIVE_ORDER);
+        String s = &quot;&quot;;
+        List&lt;ErrorDescription&gt; lists = new ArrayList&lt;&gt;();
+        for (String name : list) {
+            try {    
+                //System.out.println(name);
+                ReadFile r = new ReadFile(name);
+                CheckUtil c = new CheckUtil(r);
+                if (c.startCheck()) {
+                    System.out.println(name +&quot;:没有错误&quot;);
+                } else {
+                    lists.addAll(c.getErrorList());
+                }
+            } catch(Exception e) {
+                System.out.println(&quot;出现未捕获的异常，信息如下：&quot;);
+                e.printStackTrace();
+                System.exit(-1);
+            }
+        }
+        for (ErrorDescription e : lists) {
+            System.out.println(e.getErrorDes());
+        }
+    }
+}
+</code></pre>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/11/08/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/11/20/androidLifecycleAndlauncherMode/" rel="prev" title="activity生命周期和启动模式深入理解">
+                activity生命周期和启动模式深入理解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Jimbo</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/bornbeauty" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="zhongjinbao1994@gmail.com" target="_blank" title="email">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>email</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://plus.google.com/yourname" target="_blank" title="Google">
+                      
+                        <i class="fa fa-fw fa-google"></i>Google</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/zhongjinbao1994" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://stackoverflow.com/users/6255622/%E9%92%9F%E9%87%91%E5%AE%9D" target="_blank" title="StackOverflow">
+                      
+                        <i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-实现效果"><span class="nav-number">1.</span> <span class="nav-text">1.实现效果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-核心算法"><span class="nav-number">2.</span> <span class="nav-text">2.核心算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-思路分析"><span class="nav-number">3.</span> <span class="nav-text">3.思路分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-具体实现"><span class="nav-number">4.</span> <span class="nav-text">4.具体实现</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jimbo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

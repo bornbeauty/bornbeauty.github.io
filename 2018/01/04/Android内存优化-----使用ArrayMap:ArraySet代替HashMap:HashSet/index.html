@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="[TOC] 1. 为什么要用ArrayMap/ArraySet在Android开发中，经常会用到HashMap/HashSet等集合类，但是Java在设计集合类的时候并没有考虑到内存宝贵场景下优化。而对Android系统来说内存是非常宝贵的资源，所以Google针对Android系统的特性提供了 HashMap/HashSet的代替品，即ArrayMap/ArraySet。这几个类位于androi">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android内存优化-----使用ArrayMap:ArraySet代替HashMap:HashSet">
+<meta property="og:url" content="https://bornbeauty.github.io/2018/01/04/Android内存优化-----使用ArrayMap:ArraySet代替HashMap:HashSet/index.html">
+<meta property="og:site_name" content="Jimbo`s Blog">
+<meta property="og:description" content="[TOC] 1. 为什么要用ArrayMap/ArraySet在Android开发中，经常会用到HashMap/HashSet等集合类，但是Java在设计集合类的时候并没有考虑到内存宝贵场景下优化。而对Android系统来说内存是非常宝贵的资源，所以Google针对Android系统的特性提供了 HashMap/HashSet的代替品，即ArrayMap/ArraySet。这几个类位于androi">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/711974-88f9cd66dfea5eb8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/711974-66d02bf2c8b5c024.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/711974-9ade6b011f0367b4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-04-28T02:27:51.441Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android内存优化-----使用ArrayMap:ArraySet代替HashMap:HashSet">
+<meta name="twitter:description" content="[TOC] 1. 为什么要用ArrayMap/ArraySet在Android开发中，经常会用到HashMap/HashSet等集合类，但是Java在设计集合类的时候并没有考虑到内存宝贵场景下优化。而对Android系统来说内存是非常宝贵的资源，所以Google针对Android系统的特性提供了 HashMap/HashSet的代替品，即ArrayMap/ArraySet。这几个类位于androi">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/711974-88f9cd66dfea5eb8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://bornbeauty.github.io/2018/01/04/Android内存优化-----使用ArrayMap:ArraySet代替HashMap:HashSet/"/>
+
+
+
+
+
+  <title>Android内存优化-----使用ArrayMap:ArraySet代替HashMap:HashSet | Jimbo`s Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jimbo`s Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://bornbeauty.github.io/2018/01/04/Android内存优化-----使用ArrayMap:ArraySet代替HashMap:HashSet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jimbo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jimbo`s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android内存优化-----使用ArrayMap:ArraySet代替HashMap:HashSet</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-04T21:12:12+00:00">
+                2018-01-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>[TOC]</p>
+<h3 id="1-为什么要用ArrayMap-ArraySet"><a href="#1-为什么要用ArrayMap-ArraySet" class="headerlink" title="1. 为什么要用ArrayMap/ArraySet"></a>1. 为什么要用ArrayMap/ArraySet</h3><p>在Android开发中，经常会用到<code>HashMap/HashSet</code>等集合类，但是Java在设计集合类的时候并没有考虑到内存宝贵场景下优化。而对Android系统来说内存是非常宝贵的资源，所以Google针对Android系统的特性提供了 <code>HashMap/HashSet</code>的代替品，即<code>ArrayMap/ArraySet</code>。这几个类位于<code>android.util.*</code>包下面。</p>
+<h3 id="2-简单回忆下HashMap-lt-K-V-gt-的实现"><a href="#2-简单回忆下HashMap-lt-K-V-gt-的实现" class="headerlink" title="2. 简单回忆下HashMap&lt;K, V&gt;的实现"></a>2. 简单回忆下HashMap&lt;K, V&gt;的实现</h3><h4 id="2-1-数据接口"><a href="#2-1-数据接口" class="headerlink" title="2.1 数据接口"></a>2.1 数据接口</h4><p>在Java中，HashMap是通过数组加引用组合实现的数据结构，结构图如下：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/711974-88f9cd66dfea5eb8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="注：图片来自网络">)</p>
+<p>从图中我们看到，数组的每个元素之后会跟着一条链表。我们应该很容易想到这是为了解决HashCode冲突而设计的，使用链地址法解决冲突。</p>
+<blockquote>
+<p>顺便提一下解决冲突的常用四个方法：</p>
+<ol>
+<li>链地址法</li>
+<li>再Hash法</li>
+<li>开放地址发</li>
+<li>建立公共溢出区</li>
+</ol>
+</blockquote>
+<h4 id="2-2-HashMap的数据结构"><a href="#2-2-HashMap的数据结构" class="headerlink" title="2.2 HashMap的数据结构"></a>2.2 HashMap的数据结构</h4><p>HashMap有三个构造方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">HaspMap()</span><br><span class="line">HaspMap(int initialCapacity)</span><br><span class="line">HashMap(int initialCapacity, float loadFactor)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>其中 initialCapacity是一个初始化容量大小，指的是table数组的初始大小。</li>
+<li>loadFactor是负载因子，当table数组的实际容量超过（initialCapacity*loadFactor）的时候，table数组就会扩容。</li>
+<li>initialCapacity默认值是15 而loadFactor的默认值是0.75 他俩都是影响HashMap性能的重要因素。</li>
+</ul>
+<p>首先看下构造函数的源码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">public HashMap(int initialCapacity, float loadFactor) &#123;</span><br><span class="line">        // 首先检查各个参数的合法性</span><br><span class="line">        if (initialCapacity &lt; 0)</span><br><span class="line">            throw new IllegalArgumentException(&quot;Illegal initial capacity: &quot;</span><br><span class="line">                    + initialCapacity);</span><br><span class="line">        if (initialCapacity &gt; MAXIMUM_CAPACITY)</span><br><span class="line">            initialCapacity = MAXIMUM_CAPACITY;</span><br><span class="line">        if (loadFactor &lt;= 0 || Float.isNaN(loadFactor))</span><br><span class="line">            throw new IllegalArgumentException(&quot;Illegal load factor: &quot;</span><br><span class="line">                    + loadFactor);</span><br><span class="line"></span><br><span class="line">        // 计算出大于 initialCapacity 的最小的 2 的 n 次方值。</span><br><span class="line">        // HashMap的实际数组大小都是2^n，是为了优化而设计</span><br><span class="line">        int capacity = 1;</span><br><span class="line">        while (capacity &lt; initialCapacity)</span><br><span class="line">            capacity &lt;&lt;= 1;</span><br><span class="line">       </span><br><span class="line">        this.loadFactor = loadFactor;</span><br><span class="line">        // 计算极限容量 超过后将会进行扩容</span><br><span class="line">        threshold = (int) (capacity * loadFactor);</span><br><span class="line">        //初始化table数组</span><br><span class="line">        table = new Entry[capacity];</span><br><span class="line">        init();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>其中有一个<code>Entry</code>是<code>HashMap</code>的内部类：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Entry() &#123;</span><br><span class="line">     K key;                           </span><br><span class="line">     V value;</span><br><span class="line">     Entry&lt;K, V&gt; next;</span><br><span class="line">     int hash;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>它是实际储存Key和Value的实体。next是指向下一个元素的引用，hash是key的hash值。</p>
+<h4 id="2-3-数据的存放"><a href="#2-3-数据的存放" class="headerlink" title="2.3 数据的存放"></a>2.3 数据的存放</h4><p>再来看下<code>put</code>方法的源码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">public V put(K key, V value) &#123;</span><br><span class="line">        // 如果key的值是null，直接将其放在null位置上，也就是第一个位置上</span><br><span class="line">        if (key == null)</span><br><span class="line">            return putForNullKey(value);</span><br><span class="line">        //计算key的hash值</span><br><span class="line">        int hash = hash(key.hashCode());</span><br><span class="line">        //计算key hash 值在 table 数组中的位置</span><br><span class="line">        int i = indexFor(hash, table.length);</span><br><span class="line">        //从i出开始迭代 e,找到 key 保存的位置</span><br><span class="line">        for (Entry&lt;K, V&gt; e = table[i]; e != null; e = e.next) &#123;</span><br><span class="line">            Object k;</span><br><span class="line">            //判断该条链上是否有hash值相同的(key相同)</span><br><span class="line">            //若存在相同，则直接覆盖value，返回旧value</span><br><span class="line">            if (e.hash == hash &amp;&amp; ((k = e.key) == key || key.equals(k))) &#123;</span><br><span class="line">                V oldValue = e.value;    //旧值 = 新值</span><br><span class="line">                e.value = value;</span><br><span class="line">                e.recordAccess(this);</span><br><span class="line">                return oldValue;     //返回旧值</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        //修改次数增加1</span><br><span class="line">        modCount++;</span><br><span class="line">        //将key、value添加至i位置处</span><br><span class="line">        addEntry(hash, key, value, i);</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>首先判断key值是否为null，如果是null，则将hash值当成0处理 否则</li>
+<li>根据key对象的<code>hashCode()</code>方法计算出hash值，然后再将hash值转化成在table中的索引 然后</li>
+<li>查找该索引处的链表中是否存在key相同的对象，如果有则将其覆盖，并且返回旧值 否则</li>
+<li>将key、value存放于该数组索引处链表的第一个位置上，其中这一步是在<code>addEntry()</code>方法中完成的</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">void addEntry(int hash, K key, V value, int bucketIndex) &#123;</span><br><span class="line">        //获取bucketIndex处的Entry</span><br><span class="line">        Entry&lt;K, V&gt; e = table[bucketIndex];</span><br><span class="line">        //将新创建的 Entry 放入 bucketIndex 索引处，并让新的 Entry 指向原来的 Entry </span><br><span class="line">        table[bucketIndex] = new Entry&lt;K, V&gt;(hash, key, value, e);</span><br><span class="line">        //若HashMap中元素的个数超过极限了，则容量扩大两倍</span><br><span class="line">        if (size++ &gt;= threshold)</span><br><span class="line">            resize(2 * table.length);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-4-数据的取出"><a href="#2-4-数据的取出" class="headerlink" title="2.4 数据的取出"></a>2.4 数据的取出</h4><p>对于HashMap，取出值是相对简单的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public V get(Object key) &#123;</span><br><span class="line">        // 若为null，调用getForNullKey方法返回相对应的value</span><br><span class="line">        if (key == null)</span><br><span class="line">            return getForNullKey();</span><br><span class="line">        // 根据该 key 的 hashCode 值计算它的 hash 码  </span><br><span class="line">        int hash = hash(key.hashCode());</span><br><span class="line">        // 取出 table 数组中指定索引处的值</span><br><span class="line">        for (Entry&lt;K, V&gt; e = table[indexFor(hash, table.length)]; e != null; e = e.next) &#123;</span><br><span class="line">            Object k;</span><br><span class="line">            //若搜索的key与查找的key相同，则返回相对应的value</span><br><span class="line">            if (e.hash == hash &amp;&amp; ((k = e.key) == key || key.equals(k)))</span><br><span class="line">                return e.value;</span><br><span class="line">        &#125;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-5-HashMap的小结"><a href="#2-5-HashMap的小结" class="headerlink" title="2.5 HashMap的小结"></a>2.5 HashMap的小结</h4><p>从上面的分析中可以看出，HashMap的存取速度都是相对比较快的，在一般情况下都能实现O(1)的速度，但是从初始容量和负载因子都可以看出，这种快速的读取都是通过内存来换取，而对于移动设备来讲，内存又是很重要的，所以，Google为我们提供了Arraymap来代替它。</p>
+<h3 id="3-ArrayMap的简单分析"><a href="#3-ArrayMap的简单分析" class="headerlink" title="3. ArrayMap的简单分析"></a>3. ArrayMap的简单分析</h3><p>在ArrayMap的内部，使用一个hash数组加一个kay，value数组来储存。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/711974-66d02bf2c8b5c024.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Google官方图"></p>
+<blockquote>
+<p>当你想获取某个value的时候，ArrayMap会计算输入key转换过后的hash值，然后对hash数组使用二分查找法寻找到对应的index，然后我们可以通过这个index在另外一个数组中直接访问到需要的键值对。如果在第二个数组键值对中的key和前面输入的查询key不一致，那么就认为是发生了碰撞冲突。为了解决这个问题，我们会以该key为中心点，分别上下展开，逐个去对比查找，直到找到匹配的值（开放地址法）。如下图所示：</p>
+</blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/711974-9ade6b011f0367b4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Google官网图"></p>
+<p>可以看出，ArrayMap将内存的使用率提高了很多，但是读取的复杂度却是O(lgN)（因为二分法查找）。所以在数据量不是很大（千级以内）的时候，我们使用ArrapMap可以优化内存，并且存取速度几乎是不受什么影响的。 </p>
+<p>其实这里还有一点，就是自动装箱问题，假设我们把一个key是int类型的数据存储时，HashMap会将int值自动装箱成Integer对象，一个对象和一个基本类型所占的内存大小是差别很大的，所以为了避免这样情况，Google提供了<code>SparseIntArray</code>,<code>SparseBoolArray</code>等一系列大礼包供我们使用。</p>
+<h3 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h3><p>总结一句话，在数据量千级以内，使用<code>ArrayMap ArraySet</code>或者<code>SparseIntMap等</code>来代替<code>HashMap</code>，以此节约宝贵的内存资源。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/14/练手系列-Kotlin实现JSBridge/" rel="next" title="练手系列-Kotlin实现JSBridge">
+                <i class="fa fa-chevron-left"></i> 练手系列-Kotlin实现JSBridge
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Jimbo</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/bornbeauty" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="zhongjinbao1994@gmail.com" target="_blank" title="email">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>email</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://plus.google.com/yourname" target="_blank" title="Google">
+                      
+                        <i class="fa fa-fw fa-google"></i>Google</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/zhongjinbao1994" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://stackoverflow.com/users/6255622/%E9%92%9F%E9%87%91%E5%AE%9D" target="_blank" title="StackOverflow">
+                      
+                        <i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-为什么要用ArrayMap-ArraySet"><span class="nav-number">1.</span> <span class="nav-text">1. 为什么要用ArrayMap/ArraySet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-简单回忆下HashMap-lt-K-V-gt-的实现"><span class="nav-number">2.</span> <span class="nav-text">2. 简单回忆下HashMap&lt;K, V&gt;的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-数据接口"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 数据接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-HashMap的数据结构"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 HashMap的数据结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-数据的存放"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 数据的存放</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-数据的取出"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 数据的取出</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5-HashMap的小结"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 HashMap的小结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-ArrayMap的简单分析"><span class="nav-number">3.</span> <span class="nav-text">3. ArrayMap的简单分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-总结"><span class="nav-number">4.</span> <span class="nav-text">4. 总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jimbo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

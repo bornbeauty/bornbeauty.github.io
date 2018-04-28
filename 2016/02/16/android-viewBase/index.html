@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="关于View的基础知识介绍">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="有关View的基础知识介绍">
+<meta property="og:url" content="https://bornbeauty.github.io/2016/02/16/android-viewBase/index.html">
+<meta property="og:site_name" content="Jimbo`s Blog">
+<meta property="og:description" content="关于View的基础知识介绍">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://my.csdn.net/uploads/201208/01/1343827041_4739.png">
+<meta property="og:updated_time" content="2018-04-28T02:27:51.441Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="有关View的基础知识介绍">
+<meta name="twitter:description" content="关于View的基础知识介绍">
+<meta name="twitter:image" content="http://my.csdn.net/uploads/201208/01/1343827041_4739.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://bornbeauty.github.io/2016/02/16/android-viewBase/"/>
+
+
+
+
+
+  <title>有关View的基础知识介绍 | Jimbo`s Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jimbo`s Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://bornbeauty.github.io/2016/02/16/android-viewBase/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jimbo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jimbo`s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">有关View的基础知识介绍</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-02-16T00:00:00+00:00">
+                2016-02-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  关于View的基础知识介绍
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>今天开始学习一下android有关View的知识</p>
+</blockquote>
+<h1 id="1-什么是View"><a href="#1-什么是View" class="headerlink" title="1.什么是View"></a>1.什么是View</h1><p>在开发过程中,view的使用频率是非常之高的.那么View到底是什么呢.<strong><em>View其实是android中所有控件的基类.</em></strong>无论是简单的button,复杂的listview,还是布局容器linearlayout等等;所以,这个View就是界面层控件的一层抽象.除了View,还有一个ViewGroup类,他也是继承自View,但是从名字上就可以看出,它是一个View组,可以包含多个View.如此设计,便可以得到一个树形结构.<br><img src="http://my.csdn.net/uploads/201208/01/1343827041_4739.png" alt="view结构"></p>
+<h1 id="2-View的位置参数"><a href="#2-View的位置参数" class="headerlink" title="2.View的位置参数"></a>2.View的位置参数</h1><p>View的位置是由四个顶点决定的,分别对应top,left,right和bottom.需要注意的是这些数值都是相对于<strong><em> 父控件 </em></strong>来说的.</p>
+<pre><code>//一般要获取View的大小可以这样
+viewWidth = view.getRight() - view.getLeft();
+viewHeight = view.getBottom - view.getTop();
+</code></pre><p>到了android3.0的时候,google又增加了额外的几个参数:x,y,translationX和translationY.<br>x,y表示的是左上角点的坐标.translationX和translationY的默认值都是0.</p>
+<pre><code>x = left + translationX;
+y = right + translationY;
+</code></pre><p><strong><em>需要强调的是:在View平移的过程中,top和left表示的是原始的左上角的位置信息,是不会发生改变的.发生改变的是x,y,translationX和translationY.</em></strong></p>
+<h1 id="3-MotionEvent和TouchSlop"><a href="#3-MotionEvent和TouchSlop" class="headerlink" title="3.MotionEvent和TouchSlop"></a>3.MotionEvent和TouchSlop</h1><p>1.MotionEvent-手势事件<br>主要包括一下几个类型:<br>ACTION_DOWN:手指刚刚接触屏幕<br>ACTION_UP:手指松开的一瞬间<br>ACTION_MOVE:手指在屏幕上移动<br>对于这些事件发生的位置可以提供以下几个方法获取位置:</p>
+<pre><code>//相对于所在view的x,y坐标
+x = motionEvent.getX();
+y = motionEvent.getY();
+//相对于屏幕所在位置
+rawX = motionEvent.getRawX();
+rawY = motionEvent.getRawY();
+</code></pre><p>2.TouchSlop<br>它是一个常量,是系统所能识别的滑动的最小距离.换句话说,如果你移动的距离小雨这个常量,系统就不会认为你这是一次滑动事件.</p>
+<pre><code>//可以通过一下方法获取这个常量 系统版本不一样 数值不一样的
+ViewConfiguration.get(getContext()).getScaledTouchSlop();
+</code></pre><h1 id="3-VelocityTracker-GestureDetector和Scroller"><a href="#3-VelocityTracker-GestureDetector和Scroller" class="headerlink" title="3.VelocityTracker,GestureDetector和Scroller"></a>3.VelocityTracker,GestureDetector和Scroller</h1><p>1.VelocityTracker<br>主要是用来追踪手指的移动速度,包括水平速度和垂直速度.<br>使用方法:在View的onTouchEvent()中追踪速度</p>
+<pre><code>VelocityTracker tracker = VelocityTracker.obtain();
+tracker.addMovement(tracker);
+</code></pre><p>获取速度的时候这样做:</p>
+<pre><code>//设置计算速度的时段的大小 单位是ms
+//这一步必须在下面方法的前面 不然报错哟
+tracker.computerCurrentVelocity(1000);
+//速度单位是 px/ms
+//速度值可能是负的
+int velocityX = (int) tracker.getXVelocity();
+int velocityY = (int) tracker.getYVelocity();
+</code></pre><p>实际上速度是这样计算的</p>
+<pre><code>速度 = (结束位置 - 开始位置) / 时间;
+</code></pre><p>在不需要的时要clear掉VelocityTracker</p>
+<pre><code>tracker.clear();
+tracker.recycle();
+</code></pre><p>2.GestureDetector-手势检测<br>用于辅助检测用户的单击,滑动,长按,双击等等行为.<br>首先,创建一个GestureDetector对象并实现onGestureListener()接口,根据需要还可以onDoubleTapListener()实现双击事件.</p>
+<pre><code>GestureDetector detector = new GestureDetector(this, new GestureDetector.OnGestureListener() {
+        @Override
+        public boolean onDown(MotionEvent e) {
+            //手指触摸屏幕的瞬间 一个ACTION_DOWN发生
+            return false;
+        }
+
+        @Override
+        public void onShowPress(MotionEvent e) {
+            //手指触摸屏幕 尚未松开 强调的是没有松开或者拖动的事件
+            //有一个ACTION_DOWN触发
+        }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            //手指触摸后松开 有一个ACTION_UP发生
+            //是单击行为
+            return false;
+        }
+
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            //手指按下屏幕并且拖动
+            //由一个ACTION_DOWN和多个ACTION_UP触发 是拖动行为
+            return false;
+        }
+
+        @Override
+        public void onLongPress(MotionEvent e) {
+            //用户长时间按住屏幕不放 这是长按事件
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        //按下屏幕 快速滑动 然后又松开
+        //由一个ACTION_DOWN,多个ACTION_MOVE和一个ACTION_UP触发
+        //这是快速滑动行为
+            return false;
+        }
+    });
+          detector.setOnDoubleTapListener(new GestureDetector.OnDoubleTapListener() {
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+        //这是严格的单击行为
+        //若是触发了onSingleTapConfirmed(),则不可能后面还发生单击,这也就是保证了这就单击 不可能是双击中的一次单击
+            return false;
+        }
+
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+        //双击 由两次单击事件发生
+            return false;
+        }
+
+        @Override
+        public boolean onDoubleTapEvent(MotionEvent e) {
+        //双击事件发生期间会随着ACTION_DOWN,ACTION_UP,ACTON_MOVE多次调用
+            return false;
+        }
+    });
+</code></pre><p>接着,接管目标View的onTouchEvent方法,在待监听View的onTouchEvent()方法中添加如下实现:</p>
+<pre><code>return decevtor.onTouchEvent(event);
+</code></pre><h1 id="3-Scroll"><a href="#3-Scroll" class="headerlink" title="3.Scroll"></a>3.Scroll</h1><p>弹性滑动对象,用于实现控件的弹性滑动.当使用View的scrollTo/scrollBy方法来进行滑动.<code>scrollTo</code>是绝对滑动,<code>scrollBy</code>是相对当前位置的滑动.</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/12/21/linux-command/" rel="next" title="linux命令操作随记-不定时更新">
+                <i class="fa fa-chevron-left"></i> linux命令操作随记-不定时更新
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/02/28/android-viewEventDeal/" rel="prev" title="View的事件分发机制">
+                View的事件分发机制 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Jimbo</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/bornbeauty" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="zhongjinbao1994@gmail.com" target="_blank" title="email">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>email</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://plus.google.com/yourname" target="_blank" title="Google">
+                      
+                        <i class="fa fa-fw fa-google"></i>Google</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/zhongjinbao1994" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://stackoverflow.com/users/6255622/%E9%92%9F%E9%87%91%E5%AE%9D" target="_blank" title="StackOverflow">
+                      
+                        <i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-什么是View"><span class="nav-number">1.</span> <span class="nav-text">1.什么是View</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-View的位置参数"><span class="nav-number">2.</span> <span class="nav-text">2.View的位置参数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-MotionEvent和TouchSlop"><span class="nav-number">3.</span> <span class="nav-text">3.MotionEvent和TouchSlop</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-VelocityTracker-GestureDetector和Scroller"><span class="nav-number">4.</span> <span class="nav-text">3.VelocityTracker,GestureDetector和Scroller</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Scroll"><span class="nav-number">5.</span> <span class="nav-text">3.Scroll</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jimbo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

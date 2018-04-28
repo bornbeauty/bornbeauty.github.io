@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="算法," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="二叉树的分层遍历  题目要求：给定一个二叉树的root结点，然后按照每层从左到右的顺序将二叉树结点的值储存在一个二维数组中，每一层一个数组，每一个数组的元素是按照从左到右的顺序进行存储的。 思路：二叉树的分层打印类似于图的广度优先遍历算法，我们可以借助一个队列实现这个过程。  初始化队列 将root结点加入到队列之中 判断当前队列是否为空 不为空，则出队队列的首元素 并且将不为空的结点入队列 为">
+<meta name="keywords" content="算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="二叉树的分层遍历">
+<meta property="og:url" content="https://bornbeauty.github.io/2016/12/06/suanfa-erchashufencengbianli/index.html">
+<meta property="og:site_name" content="Jimbo`s Blog">
+<meta property="og:description" content="二叉树的分层遍历  题目要求：给定一个二叉树的root结点，然后按照每层从左到右的顺序将二叉树结点的值储存在一个二维数组中，每一层一个数组，每一个数组的元素是按照从左到右的顺序进行存储的。 思路：二叉树的分层打印类似于图的广度优先遍历算法，我们可以借助一个队列实现这个过程。  初始化队列 将root结点加入到队列之中 判断当前队列是否为空 不为空，则出队队列的首元素 并且将不为空的结点入队列 为">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-04-28T02:27:51.441Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="二叉树的分层遍历">
+<meta name="twitter:description" content="二叉树的分层遍历  题目要求：给定一个二叉树的root结点，然后按照每层从左到右的顺序将二叉树结点的值储存在一个二维数组中，每一层一个数组，每一个数组的元素是按照从左到右的顺序进行存储的。 思路：二叉树的分层打印类似于图的广度优先遍历算法，我们可以借助一个队列实现这个过程。  初始化队列 将root结点加入到队列之中 判断当前队列是否为空 不为空，则出队队列的首元素 并且将不为空的结点入队列 为">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://bornbeauty.github.io/2016/12/06/suanfa-erchashufencengbianli/"/>
+
+
+
+
+
+  <title>二叉树的分层遍历 | Jimbo`s Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jimbo`s Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://bornbeauty.github.io/2016/12/06/suanfa-erchashufencengbianli/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jimbo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jimbo`s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">二叉树的分层遍历</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-06T00:00:00+00:00">
+                2016-12-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>二叉树的分层遍历</p>
+</blockquote>
+<p>题目要求：给定一个二叉树的root结点，然后按照每层从左到右的顺序将二叉树结点的值储存在一个二维数组中，每一层一个数组，每一个数组的元素是按照从左到右的顺序进行存储的。</p>
+<p>思路：二叉树的分层打印类似于图的广度优先遍历算法，我们可以借助一个队列实现这个过程。</p>
+<ul>
+<li>初始化队列 将root结点加入到队列之中</li>
+<li>判断当前队列是否为空<ul>
+<li>不为空，则出队队列的首元素 并且将不为空的结点入队列</li>
+<li>为空则表示遍历完成</li>
+</ul>
+</li>
+</ul>
+<p>经过上述操作之后就可以得到二叉树分层遍历的顺序了。但是我们并不能得到每一个层都有什么元素这样的信息，我们还需要在遍历的过程中使用变量记录这一个过程。</p>
+<p>一个<code>last</code>变量记录当前打印行的最右结点</p>
+<p>一个<code>nLast</code>变量记录加入队列的最近一个元素</p>
+<p>在元素弹出的时候判断一下是否和<code>last</code>元素相等，相等则表示要换行了，这时候要更新<code>last</code>的值，就是将<code>nLast</code>赋值给<code>last</code>即可，这样就实现了这个功能。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Java</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		TreeNode one = <span class="keyword">new</span> TreeNode(<span class="number">1</span>);</span><br><span class="line">		TreeNode two = <span class="keyword">new</span> TreeNode(<span class="number">2</span>);</span><br><span class="line">		TreeNode three =<span class="keyword">new</span> TreeNode(<span class="number">3</span>);</span><br><span class="line">		TreeNode four = <span class="keyword">new</span> TreeNode(<span class="number">4</span>);</span><br><span class="line">		TreeNode five = <span class="keyword">new</span> TreeNode(<span class="number">5</span>);</span><br><span class="line">		TreeNode six = <span class="keyword">new</span> TreeNode(<span class="number">6</span>);</span><br><span class="line">		TreeNode seven = <span class="keyword">new</span> TreeNode(<span class="number">7</span>);</span><br><span class="line">		TreeNode eight = <span class="keyword">new</span> TreeNode(<span class="number">8</span>);</span><br><span class="line">		TreeNode nine = <span class="keyword">new</span> TreeNode(<span class="number">9</span>);</span><br><span class="line">		TreeNode ten = <span class="keyword">new</span> TreeNode(<span class="number">10</span>);</span><br><span class="line">		TreeNode n11 = <span class="keyword">new</span> TreeNode(<span class="number">11</span>);</span><br><span class="line">		TreeNode n12 = <span class="keyword">new</span> TreeNode(<span class="number">12</span>);</span><br><span class="line">		TreeNode n13 = <span class="keyword">new</span> TreeNode(<span class="number">13</span>);</span><br><span class="line">		TreeNode n14 = <span class="keyword">new</span> TreeNode(<span class="number">14</span>);</span><br><span class="line"></span><br><span class="line">		one.left = two;</span><br><span class="line">		one.right = three;</span><br><span class="line">		<span class="comment">//two.left = four;</span></span><br><span class="line">		two.right = five;</span><br><span class="line">		three.left = six;</span><br><span class="line">		three.right = seven;</span><br><span class="line">		four.left = eight;</span><br><span class="line">		<span class="comment">//four.right = nine;</span></span><br><span class="line">		<span class="comment">//five.left = ten;</span></span><br><span class="line">		five.right = n11;</span><br><span class="line">		six.left = n12;</span><br><span class="line">		six.right = n13;</span><br><span class="line"></span><br><span class="line">		n13.right = n14;</span><br><span class="line"></span><br><span class="line">		TreePrinter p = <span class="keyword">new</span> TreePrinter();</span><br><span class="line">		<span class="keyword">int</span>[][] result = p.printTree(one);</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; result.length; i++) &#123;</span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; result[i].length; j++) &#123;</span><br><span class="line">				System.out.print(result[i][j]);</span><br><span class="line">			&#125;</span><br><span class="line">			System.out.println(<span class="string">""</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TreePrinter</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span>[][] printTree(TreeNode root) &#123;</span><br><span class="line">        <span class="comment">// write code here</span></span><br><span class="line">    	<span class="keyword">if</span> (<span class="keyword">null</span> == root) &#123;</span><br><span class="line">    		<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    	&#125;</span><br><span class="line"></span><br><span class="line">    	<span class="keyword">if</span> (<span class="keyword">null</span> == root.left &amp;&amp; <span class="keyword">null</span> == root.right) &#123;</span><br><span class="line">    		<span class="keyword">int</span>[][] result = &#123;&#123;root.val&#125;&#125;;</span><br><span class="line">    		<span class="keyword">return</span> result;</span><br><span class="line">    	&#125;</span><br><span class="line"></span><br><span class="line">    	<span class="keyword">int</span>[][] result = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>][];</span><br><span class="line"></span><br><span class="line">    	Queue&lt;TreeNode&gt; queue = <span class="keyword">new</span> LinkedList&lt;TreeNode&gt;();	</span><br><span class="line">    	TreeNode last = root;</span><br><span class="line">    	TreeNode nLast = root.right == <span class="keyword">null</span> ? root.left : root.right;</span><br><span class="line"></span><br><span class="line">    	<span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    	<span class="keyword">int</span> j = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    	<span class="keyword">int</span> numOfLine[] = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>];</span><br><span class="line"></span><br><span class="line">    	result[i] = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">    	queue.add(root);</span><br><span class="line"></span><br><span class="line">    	<span class="keyword">while</span>(!queue.isEmpty()) &#123;</span><br><span class="line"></span><br><span class="line">    		TreeNode tree = queue.poll();</span><br><span class="line">    		result[i][j++] = tree.val;</span><br><span class="line">    		numOfLine[i]++;</span><br><span class="line"></span><br><span class="line">    		<span class="keyword">if</span> (tree.left != <span class="keyword">null</span>) &#123;</span><br><span class="line">    			queue.add(tree.left);</span><br><span class="line">    			nLast = tree.left;</span><br><span class="line">    		&#125;</span><br><span class="line">    		<span class="keyword">if</span> (tree.right != <span class="keyword">null</span>) &#123;</span><br><span class="line">    			queue.add(tree.right);</span><br><span class="line">    			nLast = tree.right;</span><br><span class="line">    		&#125;</span><br><span class="line"></span><br><span class="line">    		<span class="keyword">if</span> (last == tree) &#123;</span><br><span class="line">    			j = <span class="number">0</span>;</span><br><span class="line">    			i++;</span><br><span class="line">    			result[i] = <span class="keyword">new</span> <span class="keyword">int</span>[(<span class="keyword">int</span>)(Math.pow((<span class="keyword">double</span>)<span class="number">2</span>, (<span class="keyword">double</span>)i))];</span><br><span class="line">    			last = nLast;</span><br><span class="line">    		&#125;</span><br><span class="line"></span><br><span class="line">    		</span><br><span class="line">    	&#125;</span><br><span class="line"></span><br><span class="line">    	<span class="keyword">int</span>[][] r = <span class="keyword">new</span> <span class="keyword">int</span>[i][];</span><br><span class="line">    	<span class="comment">//System.out.println(i+"");</span></span><br><span class="line">    	<span class="keyword">for</span> (<span class="keyword">int</span> g = <span class="number">0</span>; g &lt; i; g++) &#123;</span><br><span class="line">    		r[g] = <span class="keyword">new</span> <span class="keyword">int</span>[numOfLine[g]];</span><br><span class="line">    		<span class="keyword">for</span> (<span class="keyword">int</span> h = <span class="number">0</span>; h &lt; numOfLine[g]; h++) &#123;</span><br><span class="line">    			r[g][h] = result[g][h];</span><br><span class="line">    		&#125;</span><br><span class="line">    	&#125;</span><br><span class="line">    	result = <span class="keyword">null</span>;</span><br><span class="line">    	<span class="keyword">return</span> r;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> val = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">public</span> TreeNode left = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">public</span> TreeNode right = <span class="keyword">null</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TreeNode</span><span class="params">(<span class="keyword">int</span> val)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.val = val;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/算法/" rel="tag"># 算法</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/12/linux-sduoshcommandnotfound/" rel="next" title="为什么使用sudo命令执行sh会报command not found错误">
+                <i class="fa fa-chevron-left"></i> 为什么使用sudo命令执行sh会报command not found错误
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/13/life-wulinwaizhuan/" rel="prev" title="武林外传 百看不厌">
+                武林外传 百看不厌 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Jimbo</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/bornbeauty" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="zhongjinbao1994@gmail.com" target="_blank" title="email">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>email</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://plus.google.com/yourname" target="_blank" title="Google">
+                      
+                        <i class="fa fa-fw fa-google"></i>Google</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/zhongjinbao1994" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://stackoverflow.com/users/6255622/%E9%92%9F%E9%87%91%E5%AE%9D" target="_blank" title="StackOverflow">
+                      
+                        <i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jimbo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

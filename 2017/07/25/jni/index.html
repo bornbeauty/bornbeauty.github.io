@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="开发中难免要使用jni，现在系统的学一下">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jni使用详解">
+<meta property="og:url" content="https://bornbeauty.github.io/2017/07/25/jni/index.html">
+<meta property="og:site_name" content="Jimbo`s Blog">
+<meta property="og:description" content="开发中难免要使用jni，现在系统的学一下">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-04-28T02:27:51.441Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="jni使用详解">
+<meta name="twitter:description" content="开发中难免要使用jni，现在系统的学一下">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://bornbeauty.github.io/2017/07/25/jni/"/>
+
+
+
+
+
+  <title>jni使用详解 | Jimbo`s Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jimbo`s Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://bornbeauty.github.io/2017/07/25/jni/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jimbo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jimbo`s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">jni使用详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-25T00:00:00+00:00">
+                2017-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  开发中难免要使用jni，现在系统的学一下
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>开发中难免要使用jni，现在系统的学习总结一下使用的方法</p>
+</blockquote>
+<h5 id="1-jni概述"><a href="#1-jni概述" class="headerlink" title="1 jni概述"></a>1 jni概述</h5><p>  jni是Java Native Interface的缩写，中文译为“java本地方法接口”。通俗的说，jni是一种技术，通过jni你可以：</p>
+<ul>
+<li>java程序中的函数可以调用Native语言写的函数，Native一般是指C/C++编写的代码。</li>
+<li>Native程序中的函数可以调用Java层的函数，也就是说在C/C++程序中可以调用java的函数。</li>
+</ul>
+<h5 id="2-加载jni库以及注册jni函数"><a href="#2-加载jni库以及注册jni函数" class="headerlink" title="2 加载jni库以及注册jni函数"></a>2 加载jni库以及注册jni函数</h5><p>  加载jni库非常简单，只需要在调用Native函数之前使用<code>System.loadLibrary(&quot;your_libray_name&quot;)</code>即可。我们的通常做法是在class中的静态块中加载，比如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.jimbo.jni;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JNIInterface</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> &#123;</span><br><span class="line">    System.loadLibrary(<span class="string">"your_libray_name"</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//这里可以定义你的Native函数</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">native_say_hello</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">int</span> a;</span><br><span class="line">  <span class="keyword">int</span> b;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">calc</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a+b;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>知道了<code>java</code>代码编写的方法，那么问题来了，Native代码怎么编写呢？java函数怎么找到对应的Native函数呢？all right,让我们来看一下注册jni的两种方法。</p>
+<ul>
+<li>静态方法</li>
+</ul>
+<p>借助java的工具程序<code>javah</code>来实现这一过程。答题流程是这样的：</p>
+<ol>
+<li>编写java代码，然后编译生成<code>.class</code>文件。</li>
+<li>使用javah，例如<code>javah -o output packname.classname</code>来生成一个叫做<code>output.h</code>的头文件。</li>
+<li>在jni层实现这些函数。</li>
+</ol>
+<p>上面的<code>JNIInterface</code>类经过上述操作后会得到这样的头文件：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;jni.h&gt;</span></span></span><br><span class="line"><span class="comment">//...省略</span></span><br><span class="line"><span class="comment">//注：如果java的函数中已经有了“_”，则"_"将会被替换成"_l"</span></span><br><span class="line"><span class="function">JNIEXPORT <span class="keyword">void</span> JNICALL <span class="title">Java_com_jimbo_jni_JNIInterface_native_lsay_lhello</span><span class="params">(JNIEnv *, jclass)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//...省略</span></span><br></pre></td></tr></table></figure>
+<p>可以看出，这个Native函数的名字就是包名+函数名，只是因为“.”在c中有特殊的含义，所以被替换成了”_”。这个过程是这样的：</p>
+<blockquote>
+<p>当java层调用native_say_hello()函数时，他会从对应的JNI库中寻找Java_com_jimbo_jni_JNIInterface_native_lsay_lhello()函数，如果没有就会报错。如果找的到，则会为这个native_say_hello()和Java_com_jimbo_jni_JNIInterface_native_lsay_lhello()建立一个关联关系，其实就是保存jni层函数的函数指针。以后再调用native_say_hello()函数时，直接使用这个函数指针就可以了。当然这个过程是虚拟机来完成的，不需要我们操作。</p>
+</blockquote>
+<ul>
+<li><p>动态注册</p>
+<p>既然java函数和native函数时一一对应的，那么是不是有一种结构来保存这些数据信息呢？答案是肯定的。在jni技术中，用一个<code>JNINativeMethod</code>来保存，结构定义如下：</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">  <span class="comment">//java函数名 不用携带包名，待会会有其他方式提供包名，</span></span><br><span class="line">  <span class="comment">//这样查找起来效率就会更高</span></span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">char</span> *name;</span><br><span class="line">  <span class="comment">//函数签名信息，包括函数的参数以及函数的返回值等信息</span></span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">char</span> *signature;</span><br><span class="line">  <span class="comment">//函数指针，类型为void*</span></span><br><span class="line">  <span class="keyword">void</span>* fnptr;</span><br><span class="line">&#125; JNINativeMethod;</span><br></pre></td></tr></table></figure>
+<p>那么，这些对应数据什么时候会被加载出来了呢？其实在调用<code>System.loadLibrary(&quot;your_libray_name&quot;);</code>之后，紧接着会查看该库中一个叫做<code>JNI_OnLoad()</code>的函数，如果有就会调用它，动态注册就需要在这里完成。那么究竟如何实现这一个过程呢？需要调用两个函数就可以了：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">jclass clazz = (*env) -&gt; FindClass(env, className);</span><br><span class="line"></span><br><span class="line">(*env) -&gt; RegisterNatives(env, clazz, gMethods, numMethods);</span><br></pre></td></tr></table></figure>
+<p>具体注册过程可以这样写：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;jni.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;  </span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;  </span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;  </span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;assert.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">//这个函数是对应java函数的</span></span><br><span class="line"><span class="function">jstring <span class="title">native_say_hello</span><span class="params">(JNIEnv *env, jobject thiz)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> (*env) -&gt; NewStringUTF(env, <span class="string">"hello, i am from jni~"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//这个函数提供方法的对应信息，通过创建JNINativeMethod结构体来实现</span></span><br><span class="line"><span class="comment">//至于那么参数什么意思 待会具体说</span></span><br><span class="line"><span class="keyword">static</span> JNINativeMethod gMethods[] = &#123;</span><br><span class="line">  &#123;<span class="string">"native_say_hello"</span>, <span class="string">"()Ljava/lang/String"</span>, (<span class="keyword">void</span>)*native_say_hello&#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//为类的某一个方法注册</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span> registerNativeMethod(JNIEnv *env, <span class="keyword">const</span> <span class="keyword">char</span>* className, JNINativeMethod *gMethods, <span class="keyword">int</span> numbers) &#123;</span><br><span class="line">  jclass  clazz = (*env) -&gt; FindClass(env, className);</span><br><span class="line">  <span class="keyword">if</span> (null == clazz) &#123;</span><br><span class="line">    <span class="keyword">return</span> JNI_FALSE;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> ((*env)-&gt;RegisterNatives(env, clazz, gMethods, numMethods) &lt; <span class="number">0</span>) &#123;  </span><br><span class="line">        <span class="keyword">return</span> JNI_FALSE;  </span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> JNI_TURE;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//为所有类的方法注册</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">registerNatives</span><span class="params">(JNIEnv* env)</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span>* kClassName = <span class="string">"com/jimbo/jni/JNIInterface"</span>;<span class="comment">//指定要注册的类  </span></span><br><span class="line">    <span class="keyword">return</span> registerNativeMethods(env, kClassName, gMethods,  </span><br><span class="line">            <span class="keyword">sizeof</span>(gMethods) / <span class="keyword">sizeof</span>(gMethods[<span class="number">0</span>]));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//如果成功返回JNI版本, 失败返回-1</span></span><br><span class="line"><span class="function">JNIEXPORT jint JNICALL <span class="title">JNI_OnLoad</span><span class="params">(JavaVM* vm, <span class="keyword">void</span>* reserved)</span> </span>&#123;  </span><br><span class="line">    JNIEnv* env = <span class="literal">NULL</span>;  </span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((*vm)-&gt;GetEnv(vm, (<span class="keyword">void</span>**) &amp;env, JNI_VERSION_1_4) != JNI_OK) &#123;  </span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;  </span><br><span class="line">    &#125;  </span><br><span class="line">    assert(env != <span class="literal">NULL</span>);  </span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!registerNatives(env)) &#123;<span class="comment">//注册  </span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;  </span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="comment">//成功  </span></span><br><span class="line">    <span class="keyword">return</span> JNI_VERSION_1_4;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过上面的方法我们就可以将jni函数和java的函数注册在一起了。但是上面代码似乎还是有点麻烦的，<br>其实jni的AndroidRunTime类提供了一个<code>registerNativeMethods()</code>方法，可以更加简单的实现这<br>一过程。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;jni.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;  </span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;  </span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;  </span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;assert.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function">jstring <span class="title">native_say_hello</span><span class="params">(JNIEnv *env, jobject thiz)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> (*env) -&gt; NewStringUTF(env, <span class="string">"hello, i am from jni~"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> JNINativeMethod gMethods[] = &#123;</span><br><span class="line">  &#123;<span class="string">"native_say_hello"</span>, <span class="string">"()Ljava/lang/String;"</span>, (<span class="keyword">void</span>)*native_say_hello&#125;,</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//以上代码和前面是一样的</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//如果成功返回JNI版本, 失败返回-1</span></span><br><span class="line">JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, <span class="keyword">void</span>* reserved) &#123;  </span><br><span class="line">    JNIEnv* env = <span class="literal">NULL</span>;   </span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((*vm)-&gt;GetEnv(vm, (<span class="keyword">void</span>**) &amp;env, JNI_VERSION_1_4) != JNI_OK) &#123;  </span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;  </span><br><span class="line">    &#125;  </span><br><span class="line">    assert(env != <span class="literal">NULL</span>);  </span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (AndroidRunTime::registerNativeMethods(env, <span class="string">"com/jimbo/jni/JNIInterface"</span>, gMethods, <span class="keyword">sizeof</span>(gMethods) / <span class="keyword">sizeof</span>(gMethods[<span class="number">0</span>])) &lt; <span class="number">0</span>) &#123;<span class="comment">//注册  </span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">-1</span>;  </span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="comment">//成功  </span></span><br><span class="line">    <span class="keyword">return</span> JNI_VERSION_1_4;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码比较好理解，但是JNINativeMethod中的signature可能会存在疑问。例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"()V"</span></span><br><span class="line"><span class="string">"()I"</span></span><br><span class="line"><span class="string">"(II)Ljava/lang/String"</span></span><br></pre></td></tr></table></figure>
+<p>实际上这些是与函数参数以及返回值一一对对应的。<code>()</code>里面表示参数，<code>()</code>外表示的函数的返回值。<br>比如<code>(II)Ljava/lang/String</code>就对应这个函数<code>jstring functionName(int ,int)</code>。</p>
+<p>具体的对应关系如下:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">字符</th>
+<th style="text-align:center">java类型</th>
+<th style="text-align:center">c类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">V</td>
+<td style="text-align:center">void</td>
+<td style="text-align:center">void</td>
+</tr>
+<tr>
+<td style="text-align:center">Z</td>
+<td style="text-align:center">boolean</td>
+<td style="text-align:center">jboolean</td>
+</tr>
+<tr>
+<td style="text-align:center">I</td>
+<td style="text-align:center">int</td>
+<td style="text-align:center">jint</td>
+</tr>
+<tr>
+<td style="text-align:center">J</td>
+<td style="text-align:center">long</td>
+<td style="text-align:center">jlong</td>
+</tr>
+<tr>
+<td style="text-align:center">D</td>
+<td style="text-align:center">double</td>
+<td style="text-align:center">jdouble</td>
+</tr>
+<tr>
+<td style="text-align:center">F</td>
+<td style="text-align:center">float</td>
+<td style="text-align:center">jfloat</td>
+</tr>
+<tr>
+<td style="text-align:center">B</td>
+<td style="text-align:center">byte</td>
+<td style="text-align:center">jbyte</td>
+</tr>
+<tr>
+<td style="text-align:center">C</td>
+<td style="text-align:center">char</td>
+<td style="text-align:center">jchar</td>
+</tr>
+<tr>
+<td style="text-align:center">S</td>
+<td style="text-align:center">short</td>
+<td style="text-align:center">jshort</td>
+</tr>
+<tr>
+<td style="text-align:center">[I</td>
+<td style="text-align:center">int[]</td>
+<td style="text-align:center">jintarray</td>
+</tr>
+<tr>
+<td style="text-align:center">[F</td>
+<td style="text-align:center">float[]</td>
+<td style="text-align:center">jshortarray</td>
+</tr>
+<tr>
+<td style="text-align:center">[B</td>
+<td style="text-align:center">byte[]</td>
+<td style="text-align:center">jbytearray</td>
+</tr>
+<tr>
+<td style="text-align:center">[C</td>
+<td style="text-align:center">char[]</td>
+<td style="text-align:center">jchararray</td>
+</tr>
+<tr>
+<td style="text-align:center">[S</td>
+<td style="text-align:center">short[]</td>
+<td style="text-align:center">jshortarray</td>
+</tr>
+<tr>
+<td style="text-align:center">[D</td>
+<td style="text-align:center">double[]</td>
+<td style="text-align:center">jdoublearray</td>
+</tr>
+<tr>
+<td style="text-align:center">[j</td>
+<td style="text-align:center">long[]</td>
+<td style="text-align:center">jlongarray</td>
+</tr>
+<tr>
+<td style="text-align:center">[z</td>
+<td style="text-align:center">boolean[]</td>
+<td style="text-align:center">jbooleanarray</td>
+</tr>
+</tbody>
+</table>
+<p>以上是关于基本类型和基本类型的数组，那么类是如何表示的呢？</p>
+<blockquote>
+<p>如果Java函数的参数是class，则以”L”开头，以”;”结尾中间是用”/“ 隔开的包及类名。而其对应的C函数名的参数则为jobject. 一个例外是String类，其对应的类为jstring<br>Ljava/lang/String; String jstring<br>Ljava/net/Socket; Socket jobject</p>
+</blockquote>
+<h5 id="3-JNIEnv介绍"><a href="#3-JNIEnv介绍" class="headerlink" title="3 JNIEnv介绍"></a>3 JNIEnv介绍</h5><p>JNIEnv，即JNIEnvironment，字面意思就是jni环境。其实他就是一个与线程相关的jni环境结构体。<br>JNIEnv提供了一些jni系统函数，通过这些函数我们可以做：</p>
+<ul>
+<li>调用java函数</li>
+<li>操作jobject对象</li>
+</ul>
+<h5 id="4-通过JNIEnv操作jobject"><a href="#4-通过JNIEnv操作jobject" class="headerlink" title="4 通过JNIEnv操作jobject"></a>4 通过JNIEnv操作jobject</h5><p>我们都知道，类都是由方法和成员变量组成的，在jni的规则中，使用jfirldID和jMethod来表示java的<br>成员变量和方法，可通过jni下面的两个函数得到：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">jfieldId <span class="title">GetFieldID</span><span class="params">(jclass clazz, <span class="keyword">const</span> <span class="keyword">char</span> *name, <span class="keyword">const</span> <span class="keyword">char</span> *sig)</span></span>;</span><br><span class="line"><span class="function">jMethod <span class="title">GetMethodID</span><span class="params">(jclass clazz, <span class="keyword">const</span> <span class="keyword">char</span> *name, <span class="keyword">const</span> <span class="keyword">char</span> *sig)</span></span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>jclass代表的java中的类，对应<code>java.lang.Class</code>。</li>
+<li>第二个参数就是类的名称</li>
+<li>第三个参数是函数签名，和前面介绍的一样</li>
+</ul>
+<p>得到jfieldId和jMethod后依然无法调用java函数。那到底该怎么做呢？<br>不着急，我们看下面的代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">jint <span class="title">native_calc</span><span class="params">(JNIEnv *env, jobject thiz)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  jclass clazz = env -&gt; FindClass(<span class="string">"com/jimbo/jni/JNIInterface"</span>);</span><br><span class="line">  jmethodID java_calc_id = env -&gt; GetMethodID(clazz, <span class="string">"native_calc"</span>, <span class="string">"()I"</span>);</span><br><span class="line">  jfieldId a_id = env -&gt; GetFieldID(clazz, <span class="string">"a"</span>, <span class="string">"I"</span>);</span><br><span class="line">  jfieldId b_id = env -&gt; GetFieldID(clazz, <span class="string">"b"</span>, <span class="string">"I"</span>);</span><br><span class="line">  jint a = env -&gt; GetIntField(clazz, thiz, a_id);</span><br><span class="line">  jint b = env -&gt; GetIntField(clazz, thiz, b_id);</span><br><span class="line">  <span class="keyword">return</span> env -&gt; CallIntMethod(env, thiz, java_calc_id, a, b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过这段代码我们知道jni是通过<code>CallIntMethod()</code>函数来调用了java的函数。</p>
+<p>实际上，jni有一系列类似的函数，形式如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//调用函数</span></span><br><span class="line"><span class="comment">//最后参数是调用函数的参数</span></span><br><span class="line">NativeType Call&lt;Type&gt;Method(JNIEnv *env, jobject thiz, jmethodID methodID, ...);</span><br><span class="line"></span><br><span class="line"><span class="comment">//获取成员变量的值</span></span><br><span class="line">NativeType Get&lt;Type&gt;Field(JNIEnv *env, jobject thiz, jfieldId fieldID);</span><br><span class="line"><span class="comment">//或者是</span></span><br><span class="line"><span class="keyword">void</span> Set&lt;Typr&gt;FieldID(JNIEnv *env, jobject thiz, jfieldId fieldID, NativeType value);</span><br></pre></td></tr></table></figure>
+<p>常用的还用如下函数:</p>
+<p>GetObjectField(),GetIntField(),GetShortField(),GetCharField()等等。</p>
+<h5 id="5-jni的垃圾回收以及异常处理"><a href="#5-jni的垃圾回收以及异常处理" class="headerlink" title="5 jni的垃圾回收以及异常处理"></a>5 jni的垃圾回收以及异常处理</h5><p>在jni中，有三种类型的引用，包括：</p>
+<ul>
+<li>Local Reference：包括函数调用是传入的参数，在函数内创建的jobject。Local Reference<br>最大的特点就是，一旦jni函数结束，就会被回收。</li>
+<li>Global Reference：全局引用，这种对象不主动释放永远都不会被回收。</li>
+<li>Weak Reference：弱全局引用，在运行过程中可能被回收。所以在使用前要调用IsSameObject()<br>来判断他是否已经被回收了。</li>
+</ul>
+<p>我们在使用完变量后也可以通过<code>env -&gt; Delete&lt;ReferenceType&gt;Ref</code>来主动释放内存。例如DeleteLocalRef();</p>
+<p>在jni中，提供了三个函数来截获和处理异常：</p>
+<ol>
+<li>ExceptionOccured(),用来判断时候发生了异常。</li>
+<li>ExceptionClear(),用来清理jni层发生的异常。</li>
+<li>ThrowNew(),用来向java层抛出异常。</li>
+</ol>
+<p>本文参考了<a href="https://book.douban.com/subject/6802440/" target="_blank" rel="noopener">邓凡平的深入理解Android 卷1</a>以及<a href="http://blog.csdn.net/chenfeng0104/article/details/7088600" target="_blank" rel="noopener">chenfeng0104的专栏-动态注册JNI</a>。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/15/gradle(二)/" rel="next" title="gradle在Android中的使用(二)">
+                <i class="fa fa-chevron-left"></i> gradle在Android中的使用(二)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/11/android-AIDLOne/" rel="prev" title="Android进程间通信机制(一)">
+                Android进程间通信机制(一) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Jimbo</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/bornbeauty" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="zhongjinbao1994@gmail.com" target="_blank" title="email">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>email</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://plus.google.com/yourname" target="_blank" title="Google">
+                      
+                        <i class="fa fa-fw fa-google"></i>Google</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/zhongjinbao1994" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://stackoverflow.com/users/6255622/%E9%92%9F%E9%87%91%E5%AE%9D" target="_blank" title="StackOverflow">
+                      
+                        <i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-jni概述"><span class="nav-number">1.</span> <span class="nav-text">1 jni概述</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-加载jni库以及注册jni函数"><span class="nav-number">2.</span> <span class="nav-text">2 加载jni库以及注册jni函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-JNIEnv介绍"><span class="nav-number">3.</span> <span class="nav-text">3 JNIEnv介绍</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-通过JNIEnv操作jobject"><span class="nav-number">4.</span> <span class="nav-text">4 通过JNIEnv操作jobject</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-jni的垃圾回收以及异常处理"><span class="nav-number">5.</span> <span class="nav-text">5 jni的垃圾回收以及异常处理</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jimbo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

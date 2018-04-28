@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="http://7xjtan.com1.z0.glb.clouddn.com/favicon.png?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Android进程间通信机制">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android进程间通信机制(一)">
+<meta property="og:url" content="https://bornbeauty.github.io/2017/08/11/android-AIDLOne/index.html">
+<meta property="og:site_name" content="Jimbo`s Blog">
+<meta property="og:description" content="Android进程间通信机制">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7xjtan.com1.z0.glb.clouddn.com/QM%24R%5B%24DX094O2%40OYR4IBUOI.png">
+<meta property="og:image" content="http://7xjtan.com1.z0.glb.clouddn.com/5J088BAW6F2_INBOKHOSV3.png">
+<meta property="og:image" content="http://7xjtan.com1.z0.glb.clouddn.com/testAIDLResultImage.png">
+<meta property="og:updated_time" content="2018-04-28T02:27:51.441Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android进程间通信机制(一)">
+<meta name="twitter:description" content="Android进程间通信机制">
+<meta name="twitter:image" content="http://7xjtan.com1.z0.glb.clouddn.com/QM%24R%5B%24DX094O2%40OYR4IBUOI.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://bornbeauty.github.io/2017/08/11/android-AIDLOne/"/>
+
+
+
+
+
+  <title>Android进程间通信机制(一) | Jimbo`s Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jimbo`s Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://bornbeauty.github.io/2017/08/11/android-AIDLOne/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jimbo">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jimbo`s Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android进程间通信机制(一)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-11T00:00:00+00:00">
+                2017-08-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术/" itemprop="url" rel="index">
+                    <span itemprop="name">技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  Android进程间通信机制
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本片博客让我们一起来学一下android的进程之间的通信机制</p>
+</blockquote>
+<p>参考视频：<a href="http://www.imooc.com/learn/606" target="_blank" rel="noopener">慕课网-AIDL-小白成长记</a><br><a href="http://developer.android.com/guide/components/aidl.html" target="_blank" rel="noopener">android官网文档</a></p>
+<h2 id="一-什么是IPC？"><a href="#一-什么是IPC？" class="headerlink" title="一 什么是IPC？"></a>一 什么是IPC？</h2><p>IPC 即 inter-Process Communication，含义为进程间通信或者硕士跨进程通信。当我们需要在不同的进程之间通信的时候就需要了解Android的IPC。<br>Android有很多种方式来实现IPC，包括：</p>
+<ol>
+<li>使用Bundle，在使用intent调用组件的时候传递数据</li>
+<li>使用文件共享</li>
+<li>使用Messenger</li>
+<li>使用AIDL</li>
+<li>使用Socket</li>
+</ol>
+<p>一般来说，我们使用3,4比较多，其他方式都可以使用，也比较简单，但是会有数据同步的问题。</p>
+<h2 id="二-使用AIDL计算A-B-C"><a href="#二-使用AIDL计算A-B-C" class="headerlink" title="二 使用AIDL计算A+B=C"></a>二 使用AIDL计算A+B=C</h2><p>我们先抛开原理底层不看，来看一下AIDL怎么使用，然后我们在深入学习一下。做一个A+B=C的Demo来学习一下。应用场景是这样的，client端要计算A+B的值，所以去server端调用<code>add()</code>方法来计算，然后server将结果给client，client显示给用户。</p>
+<p>注：AIDL 即 Android Interface Definition Language.AIDL is similar to other IDLs you might have worked with. It allows you to define the programming interface that both the client and service agree upon in order to communicate with each other using interprocess communication (IPC). On Android, one process cannot normally access the memory of another process. So to talk, they need to decompose their objects into primitives that the operating system can understand, and marshall the objects across that boundary for you. The code to do that marshalling is tedious to write, so Android handles it for you with AIDL.</p>
+<p>AIDL类似于其他你曾经用过的IDL语言.它允许您定义的编程接口,客户端和服务达成一致,以便互相交流使用进程间通信(IPC)。在Android上,一个进程无法正常访问另一个进程的内存。所以说,他们需要他们的对象分解为原语操作系统可以理解,和马歇尔的对象边界。编组的代码是乏味的写,所以与AIDL Android为您处理。</p>
+<ol>
+<li>编写server端<br>新建工程什么的略过不说，我们直接新建一个<code>module</code>来模拟server，起名叫AIDLServer</li>
+</ol>
+<p>a. 在AIDLServer中新建AIDL Folder 然后新建一个包 新建一个AIDL文件</p>
+<p>这个时候得到如图所示的项目结构：<br><img src="http://7xjtan.com1.z0.glb.clouddn.com/QM%24R%5B%24DX094O2%40OYR4IBUOI.png" alt=""></p>
+<p>b. 在接口中添加一个<code>add()</code>方法 添加完成后编译一下<code>module</code> android studio会自动为我们生成相应的java代码(在android SDK的tools里面有一个aidl.exe工具 由他完成这个工作).在Project模式下，可以在AIDLServer-build-generated-source-aidl-debug下面看到相应的java代码</p>
+<p>c. 新建一个Service，然后新建一个IBinder<br><img src="http://7xjtan.com1.z0.glb.clouddn.com/5J088BAW6F2_INBOKHOSV3.png" alt=""></p>
+<p>d. 记得在manifest文件中注册Service，并且声明成<code>android:exported=&quot;true&quot;</code></p>
+<p>否则会抛出：java.lang.SecurityException: Not allowed to bind to service Intent { cmp=com.jimbo.server/.IMyAidlServer }<br>这样server就算编写完毕了</p>
+<ol start="2">
+<li>编写client端</li>
+</ol>
+<p>a. 完成计算界面</p>
+<p>b. 在client端也要编写AIDL文件，且与Server端一致，所以拷贝过去 编译一下</p>
+<p>c. 在MainActivity中添加一个启动Service的方法 在安卓5.0后必须通过显示的方式启动Service；conn是一个ServiceConnection对象，其中有两个回调函数<code>onServiceConnected</code>,<code>onServiceDisconnected</code>，我们可以在‘onServiceConnected`方法中获取到Server端的Service，然后在条用其中的方法</p>
+<pre><code class="java">    ServiceConnection conn = <span class="keyword">new</span> ServiceConnection() {
+        <span class="meta">@Override</span>
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onServiceConnected</span><span class="params">(ComponentName name, IBinder service)</span> </span>{
+            Log.d(<span class="string">"TestAIDL"</span>, <span class="string">"成功连接到server"</span>);
+            <span class="comment">// 获取到远端的服务</span>
+            iMyAidlInterface = IMyAidlInterface.Stub.asInterface(service);
+        }
+
+        <span class="meta">@Override</span>
+        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onServiceDisconnected</span><span class="params">(ComponentName name)</span> </span>{
+            Log.d(<span class="string">"TestAIDL"</span>, <span class="string">"断开连接"</span>);
+            iMyAidlInterface = <span class="keyword">null</span>;
+        }
+    };
+    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">bindService</span><span class="params">()</span> </span>{
+<span class="comment">//        Intent intent = new Intent(MainActivity.this,</span>
+<span class="comment">//                com.jimbo.server.IMyAidlServer.class);</span>
+        Intent intent = <span class="keyword">new</span> Intent();
+        intent.setComponent(<span class="keyword">new</span> ComponentName(<span class="string">"com.jimbo.server"</span>,
+                <span class="string">"com.jimbo.server.IMyAidlServer"</span>));
+
+        <span class="keyword">boolean</span> isBind = bindService(intent, conn, Context.BIND_AUTO_CREATE);
+        Log.d(<span class="string">"TestAIDL"</span>, <span class="string">"请求开启远端服务"</span>);
+        <span class="keyword">if</span> (isBind) {
+            Log.d(<span class="string">"TestAIDL"</span>, <span class="string">"bind成功"</span>);
+        } <span class="keyword">else</span> {
+            Log.d(<span class="string">"TestAIDL"</span>, <span class="string">"bind失败"</span>);
+        }
+    }
+</code></pre>
+<p>运行效果图：</p>
+<p><img src="http://7xjtan.com1.z0.glb.clouddn.com/testAIDLResultImage.png" alt=""></p>
+<p>学习了简单的怎么使用后 下一篇我们继续深入学习一下</p>
+<p>参考代码下载 <a href="http://pan.baidu.com/s/1eRdrMyI" target="_blank" rel="noopener">点这里</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/25/jni/" rel="next" title="jni使用详解">
+                <i class="fa fa-chevron-left"></i> jni使用详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/13/android-AIDLTwo/" rel="prev" title="Android跨进程通信机制(二)">
+                Android跨进程通信机制(二) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Jimbo</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/bornbeauty" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="zhongjinbao1994@gmail.com" target="_blank" title="email">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>email</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://plus.google.com/yourname" target="_blank" title="Google">
+                      
+                        <i class="fa fa-fw fa-google"></i>Google</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://weibo.com/zhongjinbao1994" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://stackoverflow.com/users/6255622/%E9%92%9F%E9%87%91%E5%AE%9D" target="_blank" title="StackOverflow">
+                      
+                        <i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-什么是IPC？"><span class="nav-number">1.</span> <span class="nav-text">一 什么是IPC？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-使用AIDL计算A-B-C"><span class="nav-number">2.</span> <span class="nav-text">二 使用AIDL计算A+B=C</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jimbo</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
