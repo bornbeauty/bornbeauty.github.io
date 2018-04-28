@@ -3,7 +3,7 @@
 layout: post
 title: Android进程间通信机制(一)
 category: 技术
-tags: android
+tags: Android
 description: Android进程间通信机制
 date: 2017-08-11
 ---

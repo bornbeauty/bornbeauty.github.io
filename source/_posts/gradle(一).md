@@ -2,7 +2,7 @@
 layout: post
 title: gradle在Android中的使用(一)
 category: 技术
-tags: android
+tags: Android
 description: gradle的使用
 date: 2017-07-13
 ---

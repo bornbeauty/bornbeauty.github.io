@@ -2,7 +2,7 @@
 layout: post
 title: activity生命周期和启动模式深入理解
 category: 技术
-tags: android
+tags: Android
 date: 2015-11-20
 description: double eleven happy to me
 ---

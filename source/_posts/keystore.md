@@ -2,7 +2,7 @@
 layout: post
 title: 关于keystore的作用以及生成
 category: 技术
-tags: android
+tags: Android
 description: 关于Android的作用以及怎么产生一个自己的keystore
 date: 2017-06-03
 ---

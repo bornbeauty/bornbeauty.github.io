@@ -2,7 +2,7 @@
 layout: post
 title: gradle在Android中的使用(二)
 category: 技术
-tags: android
+tags: Android
 description: 使用gradle进行签名打包，分渠道打包的方法
 date: 2017-07-15
 ---

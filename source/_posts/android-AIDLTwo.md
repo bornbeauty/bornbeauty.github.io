@@ -3,7 +3,7 @@
 layout: post
 title: Android跨进程通信机制(二)
 category: 技术
-tags: android
+tags: Android
 description: 继续学习AIDL
 date: 2017-08-13
 ---

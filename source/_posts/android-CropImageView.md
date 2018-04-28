@@ -3,7 +3,7 @@
 layout: post
 title: 不规则四边形裁剪
 category: 技术
-tags: android
+tags: Android
 description: 算是自己造的第一个轮子吧 以前总是拿过别人开源的东西来用 即使做出什么东西来也没有什么成就感 能自己造轮子感觉很棒
 date: 2016-05-12
 ---

@@ -3,7 +3,7 @@
 layout: post
 title: 定义Activity启动模式的两种方式
 category: 技术
-tags: android
+tags: Android
 description: 关于Activity启动模式定义的两种方法
 date: 2016-10-09
 ---

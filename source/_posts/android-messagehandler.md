@@ -3,7 +3,7 @@
 layout: post
 title: Android的消息机制
 category: 技术
-tags: android
+tags: Android
 description: Android的消息机制是怎样的呢?我们今天一起来看一下
 date: 2016-12-21
 ---

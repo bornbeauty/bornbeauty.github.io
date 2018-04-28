@@ -2,7 +2,7 @@
 layout: post
 title: View滑动冲突的解决方案
 category: 技术
-tags: android
+tags: Android
 description: View冲突解决方案
 date: 2016-07-22
 ---

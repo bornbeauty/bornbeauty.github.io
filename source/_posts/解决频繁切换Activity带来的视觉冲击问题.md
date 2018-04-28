@@ -2,7 +2,7 @@
 layout: post
 title: 解决频繁切换Activity带来的视觉冲击问题
 category: 技术
-tags: android
+tags: Android
 description: 
 date: 2017-03-13
 ---

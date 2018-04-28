@@ -3,7 +3,7 @@
 layout: post
 title: 关于dp px dip单位以及屏幕适配
 category: 技术
-tags: android
+tags: Android
 description:
 date: 2017-02-11
 ---

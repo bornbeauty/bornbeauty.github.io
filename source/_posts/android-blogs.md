@@ -2,7 +2,7 @@
 title: android资料整理
 layout: post
 category: 技术
-tags: android 
+tags: Android 
 description: 
 date: 2017-03-11
 ---

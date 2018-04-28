@@ -2,7 +2,7 @@
 layout: post
 title: 有关View的基础知识介绍
 category: 技术
-tags: android
+tags: Android
 description: 关于View的基础知识介绍
 date: 2016-02-16
 ---

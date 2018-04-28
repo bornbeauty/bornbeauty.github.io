@@ -2,7 +2,7 @@
 layout: post
 title: jni使用详解
 category: 技术
-tags: android
+tags: Android
 description: 开发中难免要使用jni，现在系统的学一下
 date: 2017-07-25
 ---
